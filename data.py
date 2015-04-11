@@ -12,6 +12,7 @@ from json import *
 from pymongo import *
 import csv
 import os
+import re
 
 class Data:
     """
@@ -25,3 +26,34 @@ class Data:
 
     def show(self, _id):
         return self.db.find_one({'id', _id})
+
+class Db:
+    """
+        structure of a database
+    """
+    def __init__(self, address="10.2.2.39:27017"):
+        client = MongoClient(address)
+        self.DB = client['datas']
+
+    def import_data(self, name, description=""):
+        t = re.split('\.', name)
+        if len(t) == 2 and t[-1] == 'csv':
+            # it's csv file
+            try:
+                coll = self.DB.create_collection(t[0])
+                coll.insert({'_id': 'info', 'name':t[0], 'path':'~/data/'+name, 'description': description})
+                fp = open(name)
+                r = csv.reader(fp)
+                title = r.next()
+                if 'id' not in title:
+                    raise Exception("no id attribute!")
+                for v in r:
+                    if len(v) == 0: break
+                    f = {}
+                    for i in range(len(title)):
+                        f[title[i]]=v[i]
+                    coll.insert(f)
+            except Exception as e:
+                print e.message
+                print 'Aborting...'
+
