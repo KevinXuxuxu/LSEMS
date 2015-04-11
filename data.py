@@ -37,13 +37,16 @@ class Db:
 
     def import_data(self, name, description=""):
         t = re.split('\.', name)
-        if len(t) == 2 and t[-1] == 'csv':
+        if len(t) == 2 and t[-1] in ['csv','tsv']:
             # it's csv file
+
             try:
                 coll = self.DB.create_collection(t[0])
                 coll.insert({'_id': 'info', 'name':t[0], 'path':'~/data/'+name, 'description': description})
                 fp = open(name)
-                r = csv.reader(fp)
+                if t[-1]=='csv': r = csv.reader(fp)
+                else:
+                    r = csv.reader(fp, delimiter='\t', quoting=csv.QUOTE_ALL)
                 title = r.next()
                 if 'id' not in title:
                     raise Exception("no id attribute!")
