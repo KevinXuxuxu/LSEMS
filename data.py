@@ -25,7 +25,13 @@ class Data:
         self.db.update({'id': _id}, {'$set': _dict})
 
     def show(self, _id):
-        return self.db.find_one({'id', _id})
+        return self.db.find_one({'id': _id})
+
+    def show_all(self):
+        rtn = []
+        for i in self.db.find():
+            rtn.append(i)
+        return rtn
 
 class Db:
     """
@@ -59,4 +65,8 @@ class Db:
             except Exception as e:
                 print e.message
                 print 'Aborting...'
+        # other type to be added
+
+    def get_data(self, name):
+        return Data(self.DB, name)
 
