@@ -35,14 +35,13 @@ class Db:
         client = MongoClient(address)
         self.DB = client['datas']
 
-    def import_data(self, name, description=""):
+    def import_data(self, name, description="", ignore=[]):
         t = re.split('\.', name)
         if len(t) == 2 and t[-1] in ['csv','tsv']:
-            # it's csv file
-
+            # it's csv or tsv file
             try:
                 coll = self.DB.create_collection(t[0])
-                coll.insert({'_id': 'info', 'name':t[0], 'path':'~/data/'+name, 'description': description})
+                coll.insert({'_id': 'info', 'name':t[0], 'type':t[-1], 'path':'~/data/'+name, 'description': description})
                 fp = open(name)
                 if t[-1]=='csv': r = csv.reader(fp)
                 else:
@@ -54,7 +53,8 @@ class Db:
                     if len(v) == 0: break
                     f = {}
                     for i in range(len(title)):
-                        f[title[i]]=v[i]
+                        if title[i] not in ignore:
+                            f[title[i]]=v[i]
                     coll.insert(f)
             except Exception as e:
                 print e.message
