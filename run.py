@@ -99,14 +99,19 @@ def save_results(file_name, params, DB_addr="10.2.2.39:27017"):
 
     try:
         client = MongoClient(DB_addr)
-        user = client['users'][params['name']]
-        repo = user.find_one({'exp_name': params['repo_name']})
-        er = repo['exp_records']
-        if er[-1]['commit_id'] == params['commit_id']:
-            er[-1]['result'] = results['exp']
-            user.update({'exp_name': params['repo_name']}, {'$set': {'exp_records': er}})
-        else:
-            raise Exception("Finding experiment error")
+        if results.has_key("exp"):
+            user = client['users'][params['name']]
+            repo = user.find_one({'exp_name': params['repo_name']})
+            er = repo['exp_records']
+            if er[-1]['commit_id'] == params['commit_id']:
+                er[-1]['result'] = results['exp']
+                user.update({'exp_name': params['repo_name']}, {'$set': {'exp_records': er}})
+            else:
+                raise Exception("Finding experiment error")
+        if results.has_key("dp") and len(results["dp"]) > 0:
+            data = client['datas'][params['data_set']]
+            for r in results["dp"]:
+                data.update({'id': r['id']}, {'$set': r})
     except Exception as e:
         print e.message
         print "Aborting..."
