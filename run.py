@@ -15,6 +15,7 @@ from time import asctime
 from transferOutput import transfer
 import sys
 import os
+import re
 import shutil
 
 def varifyUser(client, name):
@@ -109,9 +110,10 @@ def save_results(file_name, params, DB_addr="10.2.2.39:27017"):
             else:
                 raise Exception("Finding experiment error")
         if results.has_key("dp") and len(results["dp"]) > 0:
-            data = client['datas'][params['data_set']]
+            print "psaving dp results"
+            data = client['datas'][re.split('\.', params['data_set'])[0]]
             for r in results["dp"]:
-                data.update({'id': r['id']}, {'$set': r})
+                data.update({'id': r.pop('id')}, {'$set': {params['commit_id']:r}})
     except Exception as e:
         print e.message
         print "Aborting..."
@@ -123,11 +125,13 @@ def run(params):
     try:
         if src not in os.listdir('src'):
             raise Exception("fail to find source file "+src)
-        if 'src' in os.listdir(sb_dir):
+        if params['name'] in os.listdir(sb_dir):
             print "deleting duplication..."
-            os.system("rm -r "+sb_dir+"/src/")
-        os.system('cp -r src '+ sb_dir)
-        os.chdir(sb_dir+"/src")
+            os.system("rm -r %s/%s/" %(sb_dir, params['name']))
+        os.system("cp -r src %s" %sb_dir)
+        os.chdir(sb_dir)
+        os.system("mv src %s" %params['name'])
+        os.chdir(params['name'])
         command = ""
         if params['type'] == 'python':
             command += 'python'
@@ -147,7 +151,7 @@ def run(params):
     except Exception as e:
         print e
         print "Aborting..."
-    os.system("rm -r "+sb_dir+"/src")
+    #os.system("rm -r %s/%s/" %(sb_dir,params['name']))
     os.chdir(old_dir)
 
 def read(file_name, git_info):
