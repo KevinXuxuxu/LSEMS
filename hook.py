@@ -11,7 +11,7 @@ urls = (
 
 class index:
     def GET(self):
-        return "This is LSBIDAS."
+        return "This is LSEMS."
     def POST(self):
         data = json.loads(web.data())
         print data
