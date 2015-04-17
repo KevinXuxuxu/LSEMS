@@ -5,18 +5,40 @@ import json
 import re
 import sys
 import threading as thd
+from time import asctime
 
 urls = (
         '/', 'index'
         )
 
+block = {}
+lock = thd.RLock()
+
 class index:
     def GET(self):
         return "This is LSEMS."
     def POST(self):
+        global block
         data = json.loads(web.data())
-        os.system("python exp.py -i '%s'" %json.dumps(data))
+        name = data['user_name']
+        flag = False
 
+        lock.acquire()
+        if ( not block.has_key(name) ) or len(block[name]) == 0:
+            block[name] = {asctime(): data}
+            flag = True
+        else:
+            block[name][asctime()] = data
+        lock.release()
+
+        while flag and len(block[name]) != 0:
+            data = block[name][sorted(block[name].keys())[0]]
+            print "start"
+            os.system("python exp.py -i '%s'" %json.dumps(data))
+            print "end"
+            block[name].pop(sorted(block[name].keys())[0])
+
+    # not in use, moved to exp.py
     def exp(self, data):
         print data
         repo_url = data['repository']['url']
