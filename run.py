@@ -152,9 +152,11 @@ def run(params):
         print e
         print "Aborting..."
     #os.system("rm -r %s/%s/" %(sb_dir,params['name']))
+    print "finished!"
     os.chdir(old_dir)
 
 def read(file_name, git_info):
+    print "current dir: "+os.getcwd()
     fp = open(file_name)
     params = load(fp)
     flag, p = record(params, git_info)
