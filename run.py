@@ -50,7 +50,7 @@ def random_commit_id():
         rtn += chr(ri+48)
     return rtn
 
-def record(params, git_info = {}, DB_addr = "10.2.2.39:27017"):
+def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
     """
         this functions takes in a dictionary as parameters
         and record it in the MongoDB before run it.
@@ -93,7 +93,7 @@ def record(params, git_info = {}, DB_addr = "10.2.2.39:27017"):
         print "Aborting..."
         return False,{}
 
-def save_results(file_name, params, DB_addr="10.2.2.39:27017"):
+def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
     fp = open(file_name,'r')
     results = load(fp)
     print "Loaded output file"
