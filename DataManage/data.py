@@ -89,7 +89,7 @@ class Database:
         # other type to be added
 
     def generate_data(self, name, description="", parent="", ignore=[]):
-        os.system("cp %s ~/data/" %name)
+        os.system("cp %s ~/sandbox/data/" %name)
         self.import_data(name, description, parent, ignore)
 
     def get_data(self, name):
