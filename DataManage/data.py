@@ -38,7 +38,7 @@ class Data:
     def find_root(self):
         info = self.db.find_one({'_id': 'info'})
         if info.has_key('parent') and info['parent'] != "":
-            return self.Database.get_data(info['parent']).find_root
+            return self.Database.get_data(info['parent']).find_root()
         return self.name
 
     def show_all(self):
