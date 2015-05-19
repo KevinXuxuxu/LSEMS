@@ -37,7 +37,7 @@ class Data:
 
     def find_root(self):
         info = self.db.find_one({'_id': 'info'})
-        if into.has_key('parent') and info['parent'] != "":
+        if info.has_key('parent') and info['parent'] != "":
             return self.Database.get_data(info['parent']).find_root
         return self.name
 
@@ -94,4 +94,3 @@ class Database:
 
     def get_data(self, name):
         return Data(self, name)
-
