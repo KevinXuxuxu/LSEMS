@@ -92,5 +92,41 @@ class Database:
         os.system("cp %s ~/sandbox/data/" %name)
         self.import_data(name, description, parent, ignore)
 
+    def join(self, name, name_list=[], key='_id'):
+        rtn = self.get_data(name).show_all()
+        for i in range(0,len(rtn)):
+            value = rtn[i][key]
+            for n in name_list:
+                b = self.get_data(n).db.find_one({key:value})
+                if b:
+                    for p in b.items():
+                        if not rtn[i].has_key(p[0]):
+                            rtn[i][p[0]] = p[1]
+        return rtn
+
     def get_data(self, name):
         return Data(self, name)
+
+class view:
+    """
+        providing joined view for datasets in database.
+    """
+    def __init__(self, database, name, name_list=[], key="_id"):
+        self.database = database
+        self.prim_ds = self.database.get_data(name)
+        self.name = name
+        self.name_list = name_list
+        self.key = key
+
+    def get(self, pair):
+        rtn = self.prim_ds.db.find_one(pair)
+        for name in self.name_list:
+            b = self.database.get_data(name).db.find_one({key:rtn[key]})
+            if b:
+                for p in b.items():
+                    if not rtn.has_key(p[0]):
+                        rtn[p[0]] = p[1]
+        return rtn
+
+    def dump(self):
+        return self.database.join(self.name, self.name_list, self.key)
