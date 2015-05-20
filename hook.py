@@ -25,7 +25,7 @@ class index:
 
         no_run = True
         for commit in data['commits']:
-            if "Let's run" in commit['message'] or "Bazinga" in commit['message']:
+            if "run Forest run" in commit['message'] or "Bazinga" in commit['message']:
                 no_run = False
         if no_run:
             return
