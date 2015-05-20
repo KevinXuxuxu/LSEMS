@@ -51,11 +51,14 @@ class Database:
     """
         structure of a database
     """
-    def __init__(self, address="10.2.2.137:27017"):
+    def __init__(self, db="datas", address="10.2.2.137:27017"):
         client = MongoClient(address)
-        self.DB = client['datas']
+        self.DB = client[db]
 
     def import_data(self, name, description="", parent="", ignore=[]):
+        if self.DB.name != 'datas':
+            print "should not import data into db other than 'datas'!"
+            return
         t = re.split('\.', name)
         if len(t) == 2 and t[-1] in ['csv','tsv']:
             # it's csv or tsv file
