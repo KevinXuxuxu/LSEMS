@@ -23,6 +23,13 @@ class index:
         name = data['user_name']
         flag = False
 
+        no_run = True
+        for commit in data['commits']:
+            if "Let's run!" in commit['message'] or "Bazinga" in commit['message']
+                no_run = False
+        if no_run:
+            return
+
         lock.acquire()
         if ( not block.has_key(name) ) or len(block[name]) == 0:
             block[name] = {asctime(): data}
