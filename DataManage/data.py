@@ -110,7 +110,7 @@ class Database:
     def get_data(self, name):
         return Data(self, name)
 
-class view:
+class View:
     """
         providing joined view for datasets in database.
     """
@@ -124,7 +124,7 @@ class view:
     def get(self, pair):
         rtn = self.prim_ds.db.find_one(pair)
         for name in self.name_list:
-            b = self.database.get_data(name).db.find_one({key:rtn[key]})
+            b = self.database.get_data(name).db.find_one({self.key:rtn[self.key]})
             if b:
                 for p in b.items():
                     if not rtn.has_key(p[0]):
