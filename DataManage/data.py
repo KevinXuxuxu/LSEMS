@@ -66,7 +66,7 @@ class Database:
                 coll.insert({'_id': 'info',
                             'name':t[0],
                             'type':t[-1],
-                            'path':'~/data/'+name,
+                            'path':'~/sandbox/data/'+name,
                             'description': description,
                             'parent': parent})
                 fp = open(name)
