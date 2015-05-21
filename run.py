@@ -18,6 +18,9 @@ import os
 import re
 import shutil
 
+#os.chdir('/home/ubuntu/LSEMS/DataManage/')
+from data import *
+
 def varifyUser(client, name):
     """
         varify or create user for the record
@@ -142,12 +145,13 @@ def run(params):
         print command
         os.system(command)
         # eggache import
-        os.chdir("DataManage/")
-        from data import *
-        os.chdir("..")
+        #os.chdir("DataManage/")
+        #from data import *
+        #os.chdir("..")
         mgdb = Database()
-        for out_file in split(params['out']):
-            mgdb.generate_data(out_file, description="generated data "+out_file, parent="data_set")
+        parent = re.split('\.', params['data_set'])[0]
+        for out_file in re.split(' ', params['out']):
+            mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
         os.system('cp output.txt ~')
         os.system('cp output.json ~')
