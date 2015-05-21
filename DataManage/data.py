@@ -10,6 +10,7 @@ __email__ = "kevin.xu.fangzhou@gmail.com"
 
 from json import *
 from pymongo import *
+from pandas import *
 import csv
 import os
 import re
@@ -136,3 +137,6 @@ class View:
 
     def dump(self):
         return self.database.join(self.name, self.name_list, self.key)
+
+    def dump_df(self):
+        return DataFrame(self.dump()[1:])
