@@ -98,13 +98,16 @@ class Database:
     def join(self, name, name_list=[], key='_id'):
         rtn = self.get_data(name).show_all()
         for i in range(0,len(rtn)):
-            value = rtn[i][key]
-            for n in name_list:
-                b = self.get_data(n).db.find_one({key:value})
-                if b:
-                    for p in b.items():
-                        if not rtn[i].has_key(p[0]):
-                            rtn[i][p[0]] = p[1]
+            try:
+                value = rtn[i][key]
+                for n in name_list:
+                    b = self.get_data(n).db.find_one({key:value})
+                    if b:
+                        for p in b.items():
+                            if not rtn[i].has_key(p[0]):
+                                rtn[i][p[0]] = p[1]
+            except Exception as e:
+                print e
         return rtn
 
     def get_data(self, name):
