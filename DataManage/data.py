@@ -89,6 +89,9 @@ class Database:
         # other type to be added
 
     def generate_data(self, name, description="", parent="", ignore=[]):
+        if name not in os.listdir('.'):
+            print "no such data set to register: "+name
+            return
         os.system("cp %s ~/sandbox/data/" %name)
         self.import_data(name, description, parent, ignore)
 
