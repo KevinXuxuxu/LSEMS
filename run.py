@@ -141,8 +141,13 @@ def run(params):
         command += ' > output'
         print command
         os.system(command)
-        #print "transfering outputs..."
-        #transfer('output')
+        # eggache import
+        os.chdir("DataManage/")
+        from data import *
+        os.chdir("..")
+        mgdb = Database()
+        for out_file in split(params['out']):
+            mgdb.generate_data(out_file, description="generated data "+out_file, parent="data_set")
         print "copying outputs..."
         os.system('cp output.txt ~')
         os.system('cp output.json ~')
