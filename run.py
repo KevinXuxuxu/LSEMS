@@ -10,16 +10,13 @@ __email__ = "kevin.xu.fangzhou@gmail.com"
 
 from json import *
 from pymongo import *
-#from fetch import fetch_mongo
 from time import asctime
 from transferOutput import transfer
 import sys
 import os
 import re
 import shutil
-
-#os.chdir('/home/ubuntu/LSEMS/DataManage/')
-from data import *
+import data
 
 def varifyUser(client, name):
     """
@@ -148,7 +145,7 @@ def run(params):
         #os.chdir("DataManage/")
         #from data import *
         #os.chdir("..")
-        mgdb = Database()
+        mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
         for out_file in re.split(' ', params['out']):
             mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
@@ -166,11 +163,17 @@ def run(params):
 
 def read(file_name, git_info):
     print "current dir: "+os.getcwd()
+    print "---1---"
     fp = open(file_name)
+    print "---2---"
     params = load(fp)
+    print "---3---"
     flag, p = record(params, git_info)
+    print "---4---"
     if flag:
+        print "---5---"
         run(p)
+    print "---6---"
 def main():
     print("json file as input: ")
     file_name = raw_input()
