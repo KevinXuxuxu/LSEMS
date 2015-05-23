@@ -1,3 +1,13 @@
+# use UTP-8 #
+"""
+    This script is to run a backend service to
+    handle http requests ( GET and POST ) from
+    Gitlab server.
+"""
+
+__author__ = "Xu Fangzhou"
+__email__ = "kevin.xu.fangzhou@gmail.com"
+
 import web
 import os
 import run
