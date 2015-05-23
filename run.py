@@ -163,17 +163,11 @@ def run(params):
 
 def read(file_name, git_info):
     print "current dir: "+os.getcwd()
-    print "---1---"
     fp = open(file_name)
-    print "---2---"
     params = load(fp)
-    print "---3---"
     flag, p = record(params, git_info)
-    print "---4---"
     if flag:
-        print "---5---"
         run(p)
-    print "---6---"
 def main():
     print("json file as input: ")
     file_name = raw_input()
