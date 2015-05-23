@@ -1,3 +1,12 @@
+# use UTF-8 #
+"""
+    This script is to run a new process
+    for one run of experiment.
+"""
+
+__author__ = "Xu Fangzhou"
+__email__ = "kevin.xu.fangzhou@gmail.com"
+
 import json
 import os
 from optparse import OptionParser
