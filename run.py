@@ -73,8 +73,6 @@ def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
         params['name'] = git_info['name']
         repo_name = git_info['repo_name']
         params['repo_name'] = repo_name
-        #if git_info.has_key('name') and git_info['name'] != params['name']:
-        #    raise Exception("name conflict!")
         user = varifyUser(client, git_info['name'])
 
         exp = user.find_one({'exp_name': repo_name})
@@ -141,10 +139,6 @@ def run(params):
         command += ' > output'
         print command
         os.system(command)
-        # eggache import
-        #os.chdir("DataManage/")
-        #from data import *
-        #os.chdir("..")
         mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
         for out_file in re.split(' ', params['out']):
@@ -157,7 +151,6 @@ def run(params):
     except Exception as e:
         print e
         print "Aborting..."
-    #os.system("rm -r %s/%s/" %(sb_dir,params['name']))
     print "finished!"
     os.chdir(old_dir)
 
