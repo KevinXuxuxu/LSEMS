@@ -47,6 +47,12 @@ class Data:
         for i in self.db.find():
             rtn.append(i)
         return rtn
+        
+    def show_info(self):
+        return DataFrame(self.db.find_one({'_id':'info'}))
+
+    def show_data(self):
+        return DataFrame(self.show_all()[1:])
 
 class Database:
     """
