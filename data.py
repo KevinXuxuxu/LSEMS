@@ -55,18 +55,18 @@ class Data:
     def show_data(self):
         return DataFrame(self.show_all()[1:])
 
-    def diff(commit_id1="", commit_id2=""):
+    def diff(self, commit_id1="", commit_id2=""):
         if self.Database.name == "datas":
             diffs = []
             for i in self.db.find():
-                if (i[commit_id1] != i[commit_id2]):
+                if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
                     diffs1 = {}
                     diffs2 = {}
                     for k in i[commit_id1].keys():
                         if i[commit_id1][k] != i[commit_id2][k]:
                             diffs1[k] = i[commit_id1][k]
                             diffs2[k] = i[commit_id2][k]
-                    diffs.append({ commit_id1: diffs1, commit_id2: diffs2, i['id']})
+                    diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
         return DataFrame(diffs)
 
 class Database:
