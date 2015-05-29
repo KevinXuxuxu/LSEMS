@@ -45,6 +45,7 @@ class Data:
     def show_all(self):
         rtn = []
         for i in self.db.find():
+            i.pop('_id')
             rtn.append(i)
         return rtn
 
