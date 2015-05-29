@@ -33,10 +33,10 @@ class index:
         name = data['user_name']
         flag = False
 
-        no_run = True
+        no_run = False
         for commit in data['commits']:
-            if "run Forest run" in commit['message'] or "Bazinga" in commit['message']:
-                no_run = False
+            if "no run" in commit['message']:
+                no_run = True
         if no_run:
             return
 
