@@ -55,6 +55,20 @@ class Data:
     def show_data(self):
         return DataFrame(self.show_all()[1:])
 
+    def diff(commit_id1="", commit_id2=""):
+        if self.Database.name == "datas":
+            diffs = []
+            for i in self.db.find():
+                if (i[commit_id1] != i[commit_id2]):
+                    diffs1 = {}
+                    diffs2 = {}
+                    for k in i[commit_id1].keys():
+                        if i[commit_id1][k] != i[commit_id2][k]:
+                            diffs1[k] = i[commit_id1][k]
+                            diffs2[k] = i[commit_id2][k]
+                    diffs.append({ commit_id1: diffs1, commit_id2: diffs2, i['id']})
+        return DataFrame(diffs)
+
 class Database:
     """
         structure of a database
@@ -62,6 +76,7 @@ class Database:
     def __init__(self, db="datas", address="10.2.2.137:27017"):
         client = MongoClient(address)
         self.DB = client[db]
+        self.name = db
 
     def import_data(self, name, description="", parent="", ignore=[]):
         if self.DB.name != 'datas':
