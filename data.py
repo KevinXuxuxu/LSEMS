@@ -84,7 +84,7 @@ class ExpData(Data):
         rtn = []
         for i in self.db.find():
             rtn.append(i['exp_name'])
-        return DataBase(rtn)
+        return DataFrame(rtn)
 
     def show_exp(self, name):
         exp = self.db.find_one({'exp_name':name})
