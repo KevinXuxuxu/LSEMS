@@ -45,7 +45,7 @@ class ImageSet:
             i = self.i
             self.i += 1
             d['name'] = self.name_list[i]
-            d['type'] = _type
+            d['type'] = self.type
             d['id'] = random_id()
             return d
         else:
