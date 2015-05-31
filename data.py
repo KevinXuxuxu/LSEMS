@@ -100,13 +100,19 @@ class ExpData(Data):
                 c1 = i
             if i['commit_id'] == commit_id2:
                 c2 = i
+        flag = True
         if show == []:
             show = c1.keys()
+            flag = False
         else:
             show.append('commit_id')
         c1r, c2r = {},{}
         for key in show:
-            if c1[key] != c2[key]:
+            if key not in c1.keys() and key in c2.keys():
+                c2r[key] = c2[key]
+            elif key not in c2.keys() and key in c1.keys():
+                c1r[key] = c1[key]
+            elif c1[key] != c2[key] or flag:
                 c1r[key], c2r[key] = c1[key], c2[key]
         return DataFrame([c1r,c2r])
 
