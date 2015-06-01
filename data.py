@@ -58,9 +58,8 @@ class Data:
     def diff(self, commit_id1="", commit_id2=""):
         if self.Database.name == "datas":
             if commit_id1 == "" and commit_id2 == "":
-                get_cid = self.show_all()[1].items()
-                commit_id1 = get_cid[0][0]
-                commit_id2 = get_cid[1][0]
+                commit_ids = self.show_info()['commit_ids'][0]
+                commit_id1, commit_id2 = commit_ids[0], commit_ids[1]
             diffs = []
             for i in self.db.find():
                 if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
@@ -98,7 +97,8 @@ class Database:
                             'type':t[-1],
                             'path':'~/sandbox/data/'+name,
                             'description': description,
-                            'parent': parent})
+                            'parent': parent,
+                            'commit_ids': []})
                 fp = open(name)
                 if t[-1]=='csv': r = csv.reader(fp)
                 else:

@@ -110,8 +110,11 @@ def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
         if results.has_key("dp") and len(results["dp"]) > 0:
             print "psaving dp results"
             data = client['datas'][re.split('\.', params['data_set'])[0]]
+            commit_ids = data.find_one({'_id':'info'})['commit_ids']
+            commit_ids.insert(0,params['commit_id'])
+            data.update({'_id': 'info'}, {'$set': {'commit_ids': commit_ids }})
             for r in results["dp"]:
-                data.update({'id': r.pop('id')}, {'$set': {params['commit_id']:r}})
+                data.update({'id': r.pop('id')}, {'$set': {params['commit_id']: r }})
     except Exception as e:
         print e.message
         print "Aborting..."
