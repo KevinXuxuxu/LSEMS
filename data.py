@@ -53,7 +53,11 @@ class Data:
         return DataFrame([self.db.find_one({'_id':'info'})])
 
     def show_data(self):
-        return DataFrame(self.show_all()[1:])
+        rtn = []
+        for i in self.db.find():
+            if i.pop('_id') != 'info':
+                rtn.append(i)
+        return rtn
 
     def diff(self, commit_id1="", commit_id2=""):
         if self.Database.name == "datas":
