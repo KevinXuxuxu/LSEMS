@@ -57,6 +57,10 @@ class Data:
 
     def diff(self, commit_id1="", commit_id2=""):
         if self.Database.name == "datas":
+            if commit_id1 == "" and commit_id2 == "":
+                get_cid = self.show_all()[1].items()
+                commit_id1 = get_cid[0][0]
+                commit_id2 = get_cid[1][0]
             diffs = []
             for i in self.db.find():
                 if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
