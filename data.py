@@ -30,6 +30,15 @@ class Data:
     def show(self, _id):
         return self.db.find_one({'id': _id})
 
+    def show_all(self):
+        rtn = []
+        for i in self.db.find():
+            i.pop('_id')
+            rtn.append(i)
+        return rtn
+
+class DSData(Data):
+
     def find_parent(self):
         info = self.db.find_one({'_id': 'info'})
         if info.has_key('parent') and info['parent'] != "":
@@ -42,18 +51,70 @@ class Data:
             return self.Database.get_data(info['parent']).find_root()
         return self.name
 
-    def show_all(self):
-        rtn = []
-        for i in self.db.find():
-            i.pop('_id')
-            rtn.append(i)
-        return rtn
-
     def show_info(self):
         return DataFrame([self.db.find_one({'_id':'info'})])
 
     def show_data(self):
-        return DataFrame(self.show_all()[1:])
+        rtn = []
+        for i in self.db.find():
+            if i.pop('_id') != 'info':
+                rtn.append(i)
+        return DataFrame(rtn)
+
+    def diff(self, commit_id1="", commit_id2=""):
+        if commit_id1 == "" and commit_id2 == "":
+            commit_ids = self.show_info()['commit_ids'][0]
+            commit_id1, commit_id2 = commit_ids[0], commit_ids[1]
+        diffs = []
+        for i in self.db.find():
+            if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
+                diffs1 = {}
+                diffs2 = {}
+                for k in i[commit_id1].keys():
+                    if i[commit_id1][k] != i[commit_id2][k]:
+                        diffs1[k] = i[commit_id1][k]
+                        diffs2[k] = i[commit_id2][k]
+                diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
+        return DataFrame(diffs)
+
+class ExpData(Data):
+
+    def show_exp_names(self):
+        rtn = []
+        for i in self.db.find():
+            rtn.append(i['exp_name'])
+        return DataFrame(rtn)
+
+    def show_exp(self, name):
+        exp = self.db.find_one({'exp_name':name})
+        return DataFrame(exp['exp_records'])
+
+    def diff(self, exp_name, commit_id1="", commit_id2="", show=[]):
+        if commit_id1 == "" and commit_id2 == "":
+            commit_ids = self.show_exp(exp_name)['commit_id']
+            commit_id1 = commit_ids[commit_ids.size - 1]
+            commit_id2 = commit_ids[commit_ids.size - 2]
+        diffs = []
+        for i in self.db.find_one({'exp_name':exp_name})['exp_records']:
+            if i['commit_id'] == commit_id1:
+                c1 = i
+            if i['commit_id'] == commit_id2:
+                c2 = i
+        flag = True
+        if show == []:
+            show = c1.keys()
+            flag = False
+        else:
+            show.append('commit_id')
+        c1r, c2r = {},{}
+        for key in show:
+            if key not in c1.keys() and key in c2.keys():
+                c2r[key] = c2[key]
+            elif key not in c2.keys() and key in c1.keys():
+                c1r[key] = c1[key]
+            elif c1[key] != c2[key] or flag:
+                c1r[key], c2r[key] = c1[key], c2[key]
+        return DataFrame([c1r,c2r])
 
 class Database:
     """
@@ -62,6 +123,7 @@ class Database:
     def __init__(self, db="datas", address="10.2.2.137:27017"):
         client = MongoClient(address)
         self.DB = client[db]
+        self.name = db
 
     def import_data(self, name, description="", parent="", ignore=[]):
         if self.DB.name != 'datas':
@@ -79,7 +141,8 @@ class Database:
                             'type':t[-1],
                             'path':'~/sandbox/data/'+name,
                             'description': description,
-                            'parent': parent})
+                            'parent': parent,
+                            'commit_ids': []})
                 fp = open(name)
                 if t[-1]=='csv': r = csv.reader(fp)
                 else:
@@ -122,7 +185,10 @@ class Database:
         return rtn
 
     def get_data(self, name):
-        return Data(self, name)
+        if self.name == 'datas':
+            return DSData(self, name)
+        elif self.name == 'users':
+            return ExpData(self, name)
 
 class View:
     """
