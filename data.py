@@ -159,7 +159,10 @@ class Database:
         return rtn
 
     def get_data(self, name):
-        return Data(self, name)
+        if self.name == 'datas':
+            return DSData(self, name)
+        elif self.name == 'users':
+            return ExpData(self, name)
 
 class View:
     """
