@@ -62,20 +62,19 @@ class DSData(Data):
         return DataFrame(rtn)
 
     def diff(self, commit_id1="", commit_id2=""):
-        if self.Database.name == "datas":
-            if commit_id1 == "" and commit_id2 == "":
-                commit_ids = self.show_info()['commit_ids'][0]
-                commit_id1, commit_id2 = commit_ids[0], commit_ids[1]
-            diffs = []
-            for i in self.db.find():
-                if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
-                    diffs1 = {}
-                    diffs2 = {}
-                    for k in i[commit_id1].keys():
-                        if i[commit_id1][k] != i[commit_id2][k]:
-                            diffs1[k] = i[commit_id1][k]
-                            diffs2[k] = i[commit_id2][k]
-                    diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
+        if commit_id1 == "" and commit_id2 == "":
+            commit_ids = self.show_info()['commit_ids'][0]
+            commit_id1, commit_id2 = commit_ids[0], commit_ids[1]
+        diffs = []
+        for i in self.db.find():
+            if (i['_id']!='info' and i[commit_id1] != i[commit_id2]):
+                diffs1 = {}
+                diffs2 = {}
+                for k in i[commit_id1].keys():
+                    if i[commit_id1][k] != i[commit_id2][k]:
+                        diffs1[k] = i[commit_id1][k]
+                        diffs2[k] = i[commit_id2][k]
+                diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
         return DataFrame(diffs)
 
 class ExpData(Data):
@@ -89,6 +88,27 @@ class ExpData(Data):
     def show_exp(self, name):
         exp = self.db.find_one({'exp_name':name})
         return DataFrame(exp['exp_records'])
+
+    def diff(self, exp_name, commit_id1="", commit_id2="", show=[]):
+        if commit_id1 == "" and commit_id2 == "":
+            commit_ids = self.show_exp(exp_name)['commit_id']
+            commit_id1 = commit_ids[commit_ids.size - 1]
+            commit_id2 = commit_ids[commit_ids.size - 2]
+        diffs = []
+        for i in self.db.find_one({'exp_name':exp_name})['exp_records']:
+            if i['commit_id'] == commit_id1:
+                c1 = i
+            if i['commit_id'] == commit_id2:
+                c2 = i
+        if show == []:
+            show = c1.keys()
+        else:
+            show.append('commit_id')
+        c1r, c2r = {},{}
+        for key in show:
+            if c1[key] != c2[key]:
+                c1r[key], c2r[key] = c1[key], c2[key]
+        return DataFrame([c1r,c2r])
 
 class Database:
     """
