@@ -125,12 +125,32 @@ class Database:
         self.DB = client[db]
         self.name = db
 
-    def import_data(self, name, description="", parent="", ignore=[]):
+    def import_data(self, name, description="", parent="", ignore=[], it=None, _type=""):
         if self.DB.name != 'datas':
             print "should not import data into db other than 'datas'!"
             return
         t = re.split('\.', name)
-        if len(t) == 2 and t[-1] in ['csv','tsv']:
+
+        if it: # self defined input iterator
+            try:
+                coll = self.DB.create_collection(name)
+                if parent != "" and parent not in self.DB.collection_names():
+                    raise Exception("parent data set not in DB!")
+                coll.insert({'_id': 'info',
+                            'name': name,
+                            'type': _type,
+                            'path': '~/sandbox/data/'+name,
+                            'description': description,
+                            'parent': parent,
+                            'commit_ids': []})
+                for i in it(name, _type):
+                    if 'id' not in i.keys():
+                        raise Exception("no id attribute!")
+                    coll.insert(i)
+            except Exception as e:
+                print e.message
+                print 'Aborting'
+        elif len(t) == 2 and t[-1] in ['csv','tsv']:
             # it's csv or tsv file
             try:
                 coll = self.DB.create_collection(t[0])
@@ -160,7 +180,6 @@ class Database:
             except Exception as e:
                 print e.message
                 print 'Aborting...'
-        # other type to be added
 
     def generate_data(self, name, description="", parent="", ignore=[]):
         if name not in os.listdir('.'):
