@@ -30,6 +30,15 @@ class Data:
     def show(self, _id):
         return self.db.find_one({'id': _id})
 
+    def show_all(self):
+        rtn = []
+        for i in self.db.find():
+            i.pop('_id')
+            rtn.append(i)
+        return rtn
+
+class DSData(Data):
+
     def find_parent(self):
         info = self.db.find_one({'_id': 'info'})
         if info.has_key('parent') and info['parent'] != "":
@@ -41,13 +50,6 @@ class Data:
         if info.has_key('parent') and info['parent'] != "":
             return self.Database.get_data(info['parent']).find_root()
         return self.name
-
-    def show_all(self):
-        rtn = []
-        for i in self.db.find():
-            i.pop('_id')
-            rtn.append(i)
-        return rtn
 
     def show_info(self):
         return DataFrame([self.db.find_one({'_id':'info'})])
@@ -75,6 +77,18 @@ class Data:
                             diffs2[k] = i[commit_id2][k]
                     diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
         return DataFrame(diffs)
+
+class ExpData(Data):
+
+    def show_exp_names(self):
+        rtn = []
+        for i in self.db.find():
+            rtn.append(i['exp_name'])
+        return DataBase(rtn)
+
+    def show_exp(self, name):
+        exp = self.db.find_one({'exp_name':name})
+        return DataFrame(exp['exp_records'])
 
 class Database:
     """
