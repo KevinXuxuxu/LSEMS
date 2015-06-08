@@ -33,7 +33,7 @@ class Query:
             if attribute == None:
                 return res
             else:
-                return pd.concat([res["id"], pd.DataFrame(res[attribute].tolist()], axis=1)
+                return pd.concat([res["id"], pd.DataFrame(res[attribute].tolist())], axis=1)
 
     def showDataDescription(self, dataName = None, attribute = None):
         '''
