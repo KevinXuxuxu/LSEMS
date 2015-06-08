@@ -79,7 +79,7 @@ class DSData(Data):
                         if not i[k].has_key(commit_id2):
                             diffs2[k] = ''
                             diffs1[k] = i[k][commit_id1]
-                        else if i[k][commit_id1] != i[k][commit_id2]:
+                        elif i[k][commit_id1] != i[k][commit_id2]:
                             diffs1[k] = i[k][commit_id1]
                             diffs2[k]=i[k][commit_id2]
                 diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
