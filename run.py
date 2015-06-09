@@ -114,7 +114,16 @@ def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
             commit_ids.insert(0,params['commit_id'])
             data.update({'_id': 'info'}, {'$set': {'commit_ids': commit_ids }})
             for r in results["dp"]:
-                data.update({'id': r.pop('id')}, {'$set': {params['commit_id']: r }})
+                i = r.pop('id')
+                dp = data.find_one({'id':i})
+                for kv in r:
+                    if db.has_key(kv[0]):
+                        dp[kv[0]][params['commit_id']] = kv[1]
+                    else:
+                        dp[kv[0]] = {params["commit_id"]: kv[1]}
+                    data.update({'id': i}, {'$set': {kv[0]: dp[kv[0]]}})
+
+                # data.update({'id': r.pop('id')}, {'$set': {params['commit_id']: r }})
     except Exception as e:
         print e.message
         print "Aborting..."
