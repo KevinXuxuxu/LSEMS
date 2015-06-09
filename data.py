@@ -71,18 +71,20 @@ class DSData(Data):
                 diffs1 = {}
                 diffs2 = {}
                 for k in i:
-                    if not i[k].has_key(commit_id1):
-                        if i[k].has_key(commit_id2):
-                            diffs1[k]=''
-                            diffs2[k]=i[k][commit_id2]
-                    else:
-                        if not i[k].has_key(commit_id2):
-                            diffs2[k] = ''
-                            diffs1[k] = i[k][commit_id1]
-                        elif i[k][commit_id1] != i[k][commit_id2]:
-                            diffs1[k] = i[k][commit_id1]
-                            diffs2[k]=i[k][commit_id2]
-                diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
+                    if k not in ['_id', 'id']:
+                        if not i[k].has_key(commit_id1):
+                            if i[k].has_key(commit_id2):
+                                diffs1[k]=''
+                                diffs2[k]=i[k][commit_id2]
+                        else:
+                            if not i[k].has_key(commit_id2):
+                                diffs2[k] = ''
+                                diffs1[k] = i[k][commit_id1]
+                            elif i[k][commit_id1] != i[k][commit_id2]:
+                                diffs1[k] = i[k][commit_id1]
+                                diffs2[k] = i[k][commit_id2]
+                        if len(diffs1) > 0:
+                            diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
         return DataFrame(diffs)
 
 class ExpData(Data):
