@@ -6,7 +6,7 @@ class Query:
         self.user = data.Database(db = "users")
         self.name = name
 
-    def showData(self, dataName = None):
+    def showData(self, dataName = None, attribute = None):
         '''
         Show all the name of data sets or one specific data set.
 
@@ -15,17 +15,25 @@ class Query:
         dataName : str
             The name of one specific data set.
 
+        attribute : str
+            The attribute of thie data set.
+
         Example
         ----------
         >>> showData()
         >>> showData("sentiment_data")
+        >>> showData("testData", "sentiment")
         '''
         import pandas as pd
         if dataName == None:
             return pd.DataFrame(self.data.DB.collection_names())
         else:
             dataset = self.data.get_data(dataName)
-            return pd.DataFrame(dataset.show_all()[1:])
+            res = pd.DataFrame(dataset.show_all()[1:])
+            if attribute == None:
+                return res
+            else:
+                return pd.concat([res["id"], pd.DataFrame(res[attribute].tolist()], axis=1)
 
     def showDataDescription(self, dataName = None, attribute = None):
         '''
