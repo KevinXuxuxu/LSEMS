@@ -104,7 +104,6 @@ class ExpData(Data):
             commit_ids = self.show_exp(exp_name)['commit_id']
             commit_id1 = commit_ids[commit_ids.size - 1]
             commit_id2 = commit_ids[commit_ids.size - 2]
-        diffs = []
         for i in self.db.find_one({'exp_name':exp_name})['exp_records']:
             if i['commit_id'] == commit_id1:
                 c1 = i
@@ -125,6 +124,24 @@ class ExpData(Data):
             elif c1[key] != c2[key] or flag:
                 c1r[key], c2r[key] = c1[key], c2[key]
         return DataFrame([c1r,c2r])
+
+    def diff_result(self, exp_name, commit_id1='', commit_id2=''):
+        if commit_id1 == "" and commit_id2 == "":
+            commit_ids = self.show_exp(exp_name)['commit_id']
+            commit_id1 = commit_ids[commit_ids.size - 1]
+            commit_id2 = commit_ids[commit_ids.size - 2]
+        for i in self.db.find_one({'exp_name':exp_name})['exp_records']:
+            if i['commit_id'] == commit_id1:
+                r1 = {} if not i.has_key('result') else i['result']
+            if i['commit_id'] == commit_id2:
+                r2 = {} if not i.has_key('result') else i['result']
+        r1['commit_id'] = i['commit_id']
+        r2['commit_id'] = i['commit_id']
+        for k in r1:
+            if r2.has_key(k) and r1[k] == r2[k]:
+                r1.pop(k)
+                r2.pop(k)
+        return DataFrame([r1,r2])
 
 class Database:
     """
