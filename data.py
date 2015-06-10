@@ -137,7 +137,7 @@ class ExpData(Data):
                 r2 = {} if not i.has_key('result') else i['result']
         r1['commit_id'] = i['commit_id']
         r2['commit_id'] = i['commit_id']
-        for k in r1:
+        for k in r1.keys():
             if r2.has_key(k) and r1[k] == r2[k]:
                 r1.pop(k)
                 r2.pop(k)
