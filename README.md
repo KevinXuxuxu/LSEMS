@@ -5,7 +5,7 @@ After connecting to VPN, type <http://10.2.2.31> to open the main page of GitLab
 
 ![gitlab](image/gitlab.png)
 ## Make a New Project
-Clike ![new_project](image/new_project.png) to make a new project. 
+Click ![new_project](image/new_project.png) to make a new project.
 
 You can find all your projects in GitLab.
 
