@@ -28,6 +28,10 @@ class index:
     def GET(self):
         return "This is LSEMS."
     def POST(self):
+        """
+            initiating new exp process while get POST
+            request from Gitlab server through web hook.
+        """
         global block
         data = json.loads(web.data())
         name = data['user_name']

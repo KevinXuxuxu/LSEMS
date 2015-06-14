@@ -10,6 +10,10 @@ __email__ = "kevin.xu.fangzhou@gmail.com"
 import os
 
 def random_id():
+    """
+        generate random ids for image dataset.
+        no collision detection!!!
+    """
     from random import randint
     r = randint(0,56**10)
     rtn = ""

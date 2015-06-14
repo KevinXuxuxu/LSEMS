@@ -92,6 +92,10 @@ def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
         return False,{}
 
 def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
+    """
+        called after user code finishes running,
+        record experiment data into MongoDB.
+    """
     fp = open(file_name,'r')
     results = load(fp)
     print "Loaded output file"
@@ -129,6 +133,9 @@ def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
         print "Aborting..."
 
 def run(params):
+    """
+        move to sandbox/[username] to run user code.
+    """
     old_dir = os.getcwd()
     sb_dir = "/home/ubuntu/sandbox"
     src = params['src']
@@ -167,6 +174,12 @@ def run(params):
     os.chdir(old_dir)
 
 def read(file_name, git_info):
+    """
+        entrance of this code.
+        pipeline:
+            read() -> record()
+                   -> run() -> save_results()
+    """
     print "current dir: "+os.getcwd()
     fp = open(file_name)
     params = load(fp)

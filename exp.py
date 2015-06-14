@@ -14,6 +14,10 @@ import re
 import run
 
 def exp(data):
+    """
+        preprocessing before calling next step,
+        deleting duplication and cloning repository.
+    """
     print data
     repo_url = data['repository']['url']
     repo_name = re.split('/', data['repository']['homepage'])[-1:][0]

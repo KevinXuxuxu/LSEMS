@@ -17,7 +17,7 @@ import re
 
 class Data:
     """
-        structure of a single data set to manipulate on
+        structure of a single collection in MongoDB
     """
     def __init__(self, Database, name):
         self.Database = Database
@@ -38,7 +38,10 @@ class Data:
         return rtn
 
 class DSData(Data):
-
+    """
+        subclass of Data to manipulate on data sets.
+        only works on 'datas' db in MongoDB.
+    """
     def find_parent(self):
         info = self.db.find_one({'_id': 'info'})
         if info.has_key('parent') and info['parent'] != "":
@@ -88,7 +91,10 @@ class DSData(Data):
         return DataFrame(diffs)
 
 class ExpData(Data):
-
+    """
+        subclass of Data to manipulate on experiment records.
+        only works on 'users' db in MongoDB.
+    """
     def show_exp_names(self):
         rtn = []
         for i in self.db.find():
