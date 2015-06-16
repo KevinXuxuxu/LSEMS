@@ -130,7 +130,9 @@ def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
 
 def run(params):
     old_dir = os.getcwd()
-    sb_dir = "/home/ubuntu/sandbox"
+    tmp = re.split('/', old_dir)
+    sb_dir = "/%s/%s/sandbox" %(tmp[1],tmp[2])
+    #sb_dir = "/home/ubuntu/sandbox"
     src = params['src']
     try:
         if src not in os.listdir('src'):
