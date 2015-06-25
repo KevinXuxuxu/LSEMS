@@ -40,24 +40,24 @@ class index:
         if no_run:
             return
 
-        lock.acquire()
-        if ( not block.has_key(name) ) or len(block[name]) == 0:
-            block[name] = {asctime(): data}
-            flag = True
-        else:
-            block[name][asctime()] = data
-        lock.release()
+        #lock.acquire()
+        #if ( not block.has_key(name) ) or len(block[name]) == 0:
+        #    block[name] = {asctime(): data}
+        #    flag = True
+        #else:
+        #    block[name][asctime()] = data
+        #lock.release()
 
-        while flag and len(block[name]) != 0:
-            data = block[name][sorted(block[name].keys())[0]]
-            print '\033[1;32m'
-            print "start"
-            print '\033[0m'
-            os.system("python exp.py -i '%s'" %json.dumps(data))
-            print '\033[1;31m'
-            print "end"
-            print '\033[0m'
-            block[name].pop(sorted(block[name].keys())[0])
+        #while flag and len(block[name]) != 0:
+            #data = block[name][sorted(block[name].keys())[0]]
+        print '\033[1;32m'
+        print "start"
+        print '\033[0m'
+        os.system("python exp.py -i '%s'" %json.dumps(data))
+        print '\033[1;31m'
+        print "end"
+        print '\033[0m'
+        #block[name].pop(sorted(block[name].keys())[0])
 
     # not in use, moved to exp.py
     def exp(self, data):

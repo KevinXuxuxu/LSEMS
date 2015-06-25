@@ -142,8 +142,10 @@ def run(params):
             os.system("rm -r %s/%s/" %(sb_dir, params['name']))
         os.system("cp -r src %s" %sb_dir)
         os.chdir(sb_dir)
-        os.system("mv src %s" %params['name'])
-        os.chdir(params['name'])
+        # user name with time stamp as temp directory
+        dir_name = "%s-%s" %(params['name'], asctime().replace(' ','_'))
+        os.system("mv src %s" %dir_name)
+        os.chdir(dir_name)
         command = ""
         if params['type'] == 'python':
             command += 'python'
@@ -162,9 +164,13 @@ def run(params):
         os.system('cp output.json ~')
         print "recording outputs"
         save_results('output.json', params)
+        os.chdir('..')
+        os.system('rm -rf '+dir_name)
     except Exception as e:
         print e
         print "Aborting..."
+        os.chdir('..')
+        os.system('rm -rf '+dir_name)
     print "finished!"
     os.chdir(old_dir)
 
