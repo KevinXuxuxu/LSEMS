@@ -37,6 +37,8 @@ class index:
         name = data['user_name']
         flag = False
 
+        # ‘no run’ in commit message can stop system
+        # from running the code
         no_run = False
         for commit in data['commits']:
             if "no run" in commit['message']:
