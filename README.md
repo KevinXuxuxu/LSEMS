@@ -1,5 +1,5 @@
-# Data Hub Manual
-##Data Management System
+# LSEMS
+##Data Management System (Data Hub) Manual
 This is the manual for data hub system.
 ### Registration
 - After connecting to VPN, type <http://10.2.2.31> to open the main page of GitLab for registration.
@@ -16,6 +16,56 @@ This is the manual for data hub system.
 - After connecting to VPN, type <http://10.2.2.32:7777> to open the data hub IPython Notebook Web Server.
 
 ![ipython](image/ipython_main.png)
+
+- The file `sample.ipynb` under the current directory is a tutorial of Data Hub. Click the `new` button on the upper-right corner, you can create a folder named with your Gitlab account name.
+
+![new_folder](image/new_ipython.png)
+
+- Enter the new folder and create an IPython Notebook (click the `Python 2` in the above column). The following view will come up:
+![start_ipython](image/start_ipython.png)
+
+### Inspect Data Set
+
+- First, enter directory `~/LSEMS`
+
+![cd_LSEMS](image/cd_LSEMS.png)
+
+- Then, `import query` and create a Query object.
+
+![import_query](image/import_query.png)
+
+- by enter `q.` and press `tab` you can check the `query` functions available.
+
+![q_tab](image/q_tab.png)
+
+- after completion of function name, enter `?` to see related documents and examples. e.g. enter `q.importData?` will get the following information.
+
+![query_docs](image/query_docs.png)
+
+- another e.g. enter `q.showData()` will return the names of registered data sets in the database.
+
+![q_showdata](image/q_showdata.png)
+
+### Inspect Data Set Info and Dependencies
+
+- enter `q.showDescription("data_set_name")` will return the data set's information including dependencies, e.g. `parent` attribute.
+
+![q_showDescription](image/q_showDescription.png)
+
+- Some of the attribute in the description may be complicated, enter the attribute's name for detailed information.
+
+![q_showDescription_commit](image/q_showDescription_commit.png)
+
+- enter `q.showData("data_set_name")` will return the data set's metadata.
+
+![q_showData_all](image/q_showData_all.png)
+
+### Join Operation of Data Sets
+
+- There are circumstances when multiple data sets with the same primary key recorded metadata of same experiment, then we can join them for a better view of the data set.
+
+![q_join](image/q_join.png)
+
 
 ##Structure
 The system is developed on two open source project:
