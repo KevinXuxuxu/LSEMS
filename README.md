@@ -1,6 +1,8 @@
 # LSEMS
-##Data Management System (Data Hub) Manual
-This is the manual for data hub system.
+> This is the manual for LSEMS (Data Hub system)
+
+##Tutorial
+This tutorial will lead you through the pipeline with examples of the system's key functionalities.
 ### Registration
 - After connecting to VPN, type <http://10.2.2.31> to open the main page of GitLab for registration.
 
@@ -65,6 +67,56 @@ This is the manual for data hub system.
 - There are circumstances when multiple data sets with the same primary key recorded metadata of same experiment, then we can join them for a better view of the data set.
 
 ![q_join](image/q_join.png)
+
+### Experiment Submission
+
+- Initiate experiment repository and prepare the data set.
+
+- Since LSEMS manage "data" and "metadata" separately, you need to download a sample of the experiment data set when you do the coding and testing. Access the FTP server at <ftp://10.2.2.146:12314/> (name: `user`, pass: `abc123`) for these sample datas.
+
+![ftp_1](image/ftp_1.png)
+
+![ftp_2](image/ftp_2.png)
+
+- while submitting code, the repository should have directory structure as follows:
+
+		/exp_name/
+				  src/
+				 	  example.py
+				 	  outAPI.py
+				 	  ...
+				  exp.json
+
+- where `exp.json` should meet up with following requirements:
+    - Required entries:
+        - `data_set`: the input data set you are using, which should have been registerd in the database.
+        - `src`: the source file of your program, the one will be run by the system.- `type`: the type of language using.
+        - `param`: parameters for this run, set an empty dict if none.
+    - Optional entries:
+        - `out`: name of the data set your code would generate for registation.
+- here's an example `exp.json` file:
+
+![exp_json](image/exp_json.png)
+
+- src contains 2 files:
+    - `outAPI.py`, the output api provided to suit the system output recording mechanism. (will be providing package support, won't be in use soon)
+    - `gedatest.py`, users main experiment code, which will read in a `scv` data set, add a new attribute to it and out put as a new data set.
+
+            from pandas import *
+            from outAPI import *
+
+            def main():
+                df = read_csv("../data/sentiment_data.tsv", delimiter='\t', quoting=1)
+                df['attr'] = range(len(df))
+                fp = open('outfile_test.csv', 'w')
+                fp.write(df.to_csv())
+                fp.close()
+                O = Outer()
+                O.jout_exp({'description':'testing generation of datasets.'})
+                O.generate()
+
+            if __name__ == "__main__":
+                main()
 
 
 ##Structure
