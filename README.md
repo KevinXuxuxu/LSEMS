@@ -101,7 +101,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 - src contains 2 files:
     - `outAPI.py`, the output api provided to suit the system output recording mechanism. (will be providing package support, won't be in use soon)
     - `gedatest.py`, users main experiment code, which will read in a `scv` data set, add a new attribute to it and out put as a new data set.
-
+            ```Python
             from pandas import *
             from outAPI import *
 
@@ -117,6 +117,37 @@ This tutorial will lead you through the pipeline with examples of the system's k
 
             if __name__ == "__main__":
                 main()
+            ```
+### Inspect Experiment Result
+
+- enter `q.showMyExp()` in the IPython Notebook will return names of all your experiments.
+
+![q_showExp](image/q_showExp.png)
+
+- pass the name of the experiment to the function will return all submission infos.
+
+![q_showExp_exp](image/q_showExp_exp.png)
+
+### Import Data Set into database
+
+- Since the data and metadata are managed separately, data sets need to be registered after upload for metadata to be recorded.
+
+- There are 2 kinds of datas:
+    - Structured data, e.g. `csv` and `tsv` are supported in the system
+    - Unstructured data, e.g. bunch of images or logs, for which user need to define the rule to import dataset.
+
+- To import a structured data set, use `q.importData("data_set_name")` in the data set's directory, and call `q.showData()` to see if succeeded.
+
+![q_import_manual](iamge/q_import_manual.png)
+
+- To import an unstructured data such as a bunch of images in a `rawimg` directory:
+
+![img_dir](iamge/img_dir.png)
+
+- a user-defined import class (iterator) is needed, e.g.
+
+![image_set](image/image_set.png)
+
 
 
 ##Structure
