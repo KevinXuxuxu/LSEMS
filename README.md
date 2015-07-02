@@ -101,7 +101,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 - src contains 2 files:
     - `outAPI.py`, the output api provided to suit the system output recording mechanism. (will be providing package support, won't be in use soon)
     - `gedatest.py`, users main experiment code, which will read in a `scv` data set, add a new attribute to it and out put as a new data set.
-            ```Python
+
             from pandas import *
             from outAPI import *
 
@@ -117,7 +117,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 
             if __name__ == "__main__":
                 main()
-            ```
+
 ### Inspect Experiment Result
 
 - enter `q.showMyExp()` in the IPython Notebook will return names of all your experiments.
@@ -138,16 +138,23 @@ This tutorial will lead you through the pipeline with examples of the system's k
 
 - To import a structured data set, use `q.importData("data_set_name")` in the data set's directory, and call `q.showData()` to see if succeeded.
 
-![q_import_manual](iamge/q_import_manual.png)
+![q_import_manual](image/q_import_manual.png)
 
 - To import an unstructured data such as a bunch of images in a `rawimg` directory:
 
-![img_dir](iamge/img_dir.png)
+![img_dir](image/img_dir.png)
 
 - a user-defined import class (iterator) is needed, e.g.
 
 ![image_set](image/image_set.png)
 
+- Import this class and pass it as the `it` attribute, and check if succeeded.
+
+![import_image](image/import_image.png)
+
+- The data set imported with the user defined class looks like this
+
+![show_image_dir](image/show_image_dir.png)
 
 
 ##Structure
