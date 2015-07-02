@@ -181,6 +181,8 @@ The system contains 4 parts, as shown in the graph.
 ##Pipeline
 The code manage and auto-run system runs in a pipeline as shown in the graph.
 
+![pipeline](image/pipeline.png)
+
 - User pushes code to GitLab Server, the server POST to system core through web hook.
 - System core clones the repository to local directory.
 - Read experiment info from `exp.json` and upload it into `users` db in MongoDB server.
