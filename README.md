@@ -171,6 +171,8 @@ with the help of other python packages, such as
 
 The system contains 4 parts, as shown in the graph.
 
+![structure](image/structure.png)
+
 - User communicate with the ___System Core___ for information and operations, e.g. import data set, get experiment information.
 - User manage their experiment codes on ___Gitlab Server___ while each push operation triggers _System Core_ to clone and run the code if necessary.
 - The _System Core_ communicates with ___MongoDB Server___ for management of data set and experiment data (metadata).
