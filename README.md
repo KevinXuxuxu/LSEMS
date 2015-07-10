@@ -1,5 +1,56 @@
 # LSEMS
 > This is the manual for LSEMS (Data Hub system)
+> > LSEMS stands for Large Scale Experiment Management System
+
+##Structure
+The system is developed on two open source project:
+
+- [Gitlab](http://about.gitlab.com)
+- [MongoDB](http://www.mongodb.org)
+
+with the help of other python packages, such as
+
+- web.py
+- pymongo
+- pandas
+
+The system contains 4 parts, as shown in the graph.
+
+![structure](image/structure.png)
+
+- User communicate with the ___System Core___ for information and operations, e.g. import data set, get experiment information.
+- User manage their experiment codes on ___Gitlab Server___ while each push operation triggers _System Core_ to clone and run the code if necessary.
+- The _System Core_ communicates with ___MongoDB Server___ for management of data set and experiment data (metadata).
+- The _System Core_ may access to a ___Large Scale Cluster___ for more computational power.
+
+##Pipeline
+The code manage and auto-run system runs in a pipeline as shown below
+
+- User pushes code to GitLab Server, the server POST to system core through web hook.
+- System core clones the repository to local directory.
+- Read experiment info from `exp.json` and upload it into `users` db in MongoDB server.
+- Copy experiment code to sandbox and run.
+- Record output metadata from `output.json` into database in MongoDB server.
+- Import output dataset (if any) into `datas` db in MongoDB server.
+- Finishes.
+
+##Data Model
+
+The system is based on separation of "data" and "metadata". According to [Wikipedia](https://en.wikipedia.org/wiki/Metadata), metadata is defined as follows:
+
+- Metadata (metacontent) is defined as the data providing information about one or more aspects of the data, such as:
+	- Means of creation of the data
+	- Purpose of the data
+	- Time and date of creation
+	- Creator or author of the data
+	- Location on a computer network where the data was created
+	- Standards used
+
+In our data model, the datas we deal with are largely statical, we conduct experiment on them and perhaps generate new data sets. Rather than data, it is metadata for which a powerful and flexible system is needed. Further more, datas may be of huge size, e.g. gigabytes of image or log file (Big Data). It's relatively impossible to load everything into the database, yet we want to keep an archive of the datas and keep track of how they change through time. Thus, we load only those metadata we care about into the database and dynamically track them through experiments.
+
+![pipeline](image/pipeline.png)
+
+As shown in the above graph, the management of data and metadata are on the left part where a file system is in charge of holding the datas and unstructured datas are structured and imported into the database. On the right side, the process of experiment is inferred which dynamically manipulates datasets in the database. Also joint view is supported in the system.
 
 ##Tutorial
 This tutorial will lead you through the pipeline with examples of the system's key functionalities.
@@ -155,57 +206,6 @@ This tutorial will lead you through the pipeline with examples of the system's k
 - The data set imported with the user defined class looks like this
 
 ![show_image_dir](image/show_image_dir.png)
-
-
-##Structure
-The system is developed on two open source project:
-
-- [Gitlab](http://about.gitlab.com)
-- [MongoDB](http://www.mongodb.org)
-
-with the help of other python packages, such as
-
-- web.py
-- pymongo
-- pandas
-
-The system contains 4 parts, as shown in the graph.
-
-![structure](image/structure.png)
-
-- User communicate with the ___System Core___ for information and operations, e.g. import data set, get experiment information.
-- User manage their experiment codes on ___Gitlab Server___ while each push operation triggers _System Core_ to clone and run the code if necessary.
-- The _System Core_ communicates with ___MongoDB Server___ for management of data set and experiment data (metadata).
-- The _System Core_ may access to a ___Large Scale Cluster___ for more computational power.
-
-##Pipeline
-The code manage and auto-run system runs in a pipeline as shown below
-
-- User pushes code to GitLab Server, the server POST to system core through web hook.
-- System core clones the repository to local directory.
-- Read experiment info from `exp.json` and upload it into `users` db in MongoDB server.
-- Copy experiment code to sandbox and run.
-- Record output metadata from `output.json` into database in MongoDB server.
-- Import output dataset (if any) into `datas` db in MongoDB server.
-- Finishes.
-
-##Data Model
-
-The system is based on separation of "data" and "metadata". According to [Wikipedia](https://en.wikipedia.org/wiki/Metadata), metadata is defined as follows:
-
-- Metadata (metacontent) is defined as the data providing information about one or more aspects of the data, such as:
-	- Means of creation of the data
-	- Purpose of the data
-	- Time and date of creation
-	- Creator or author of the data
-	- Location on a computer network where the data was created
-	- Standards used
-
-In our data model, the datas we deal with are largely statical, we conduct experiment on them and perhaps generate new data sets. Rather than data, it is metadata for which a powerful and flexible system is needed. Further more, datas may be of huge size, e.g. gigabytes of image or log file (Big Data). It's relatively impossible to load everything into the database, yet we want to keep an archive of the datas and keep track of how they change through time. Thus, we load only those metadata we care about into the database and dynamically track them through experiments.
-
-![pipeline](image/pipeline.png)
-
-As shown in the above graph, the management of data and metadata are on the left part where a file system is in charge of holding the datas and unstructured datas are structured and imported into the database. On the right side, the process of experiment is inferred which dynamically manipulates datasets in the database. Also joint view is supported in the system.
 
 ## Code Documentation
 
