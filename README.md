@@ -179,9 +179,7 @@ The system contains 4 parts, as shown in the graph.
 - The _System Core_ may access to a ___Large Scale Cluster___ for more computational power.
 
 ##Pipeline
-The code manage and auto-run system runs in a pipeline as shown in the graph.
-
-![pipeline](image/pipeline.png)
+The code manage and auto-run system runs in a pipeline as shown below
 
 - User pushes code to GitLab Server, the server POST to system core through web hook.
 - System core clones the repository to local directory.
@@ -190,3 +188,40 @@ The code manage and auto-run system runs in a pipeline as shown in the graph.
 - Record output metadata from `output.json` into database in MongoDB server.
 - Import output dataset (if any) into `datas` db in MongoDB server.
 - Finishes.
+
+##Data Model
+
+The system is based on separation of "data" and "metadata". According to [Wikipedia](https://en.wikipedia.org/wiki/Metadata), metadata is defined as follows:
+
+- Metadata (metacontent) is defined as the data providing information about one or more aspects of the data, such as:
+	- Means of creation of the data
+	- Purpose of the data
+	- Time and date of creation
+	- Creator or author of the data
+	- Location on a computer network where the data was created
+	- Standards used
+
+In our data model, the datas we deal with are largely statical, we conduct experiment on them and perhaps generate new data sets. Rather than data, it is metadata for which a powerful and flexible system is needed. Further more, datas may be of huge size, e.g. gigabytes of image or log file (Big Data). It's relatively impossible to load everything into the database, yet we want to keep an archive of the datas and keep track of how they change through time. Thus, we load only those metadata we care about into the database and dynamically track them through experiments.
+
+![pipeline](image/pipeline.png)
+
+As shown in the above graph, the management of data and metadata are on the left part where a file system is in charge of holding the datas and unstructured datas are structured and imported into the database. On the right side, the process of experiment is inferred which dynamically manipulates datasets in the database. Also joint view is supported in the system.
+
+## Code Documentation
+
+### Running Experiments
+
+- In file `hook.py`, a `web.py` server is run for receiving posts from Gitlab web hook, it will trigger new process of `exp.py`.
+- In file `exp.py`:
+	- __`exp`__`(data)`:
+		- start running the experiment by cloning the experiment repository to local and call `read()` in `run.py`.
+		- ___parameters:___
+			- `data`: dict, pass the json recieved in the post which contains experiment info.
+- In file `run.py`:
+	- __`verifyUser`__`(client, name)`:
+		- it takes in the name to be verified and contact the server if the user exists, create it if not.
+		- ___parameters:___
+			- `client`: `MongoClient` object connected to the server.
+			- `name`: string, the name to be verified.
+		- ___output:___
+			- 

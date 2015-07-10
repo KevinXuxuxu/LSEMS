@@ -18,9 +18,9 @@ import re
 import shutil
 import data
 
-def varifyUser(client, name):
+def verifyUser(client, name):
     """
-        varify or create user for the record
+        verify or create user for the record
     """
 
     users = client['users']
@@ -73,7 +73,7 @@ def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
         params['name'] = git_info['name']
         repo_name = git_info['repo_name']
         params['repo_name'] = repo_name
-        user = varifyUser(client, git_info['name'])
+        user = verifyUser(client, git_info['name'])
 
         exp = user.find_one({'exp_name': repo_name})
         if not exp:
