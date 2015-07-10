@@ -224,4 +224,27 @@ As shown in the above graph, the management of data and metadata are on the left
 			- `client`: `MongoClient` object connected to the server.
 			- `name`: string, the name to be verified.
 		- ___output:___
-			- 
+			- the MongoDB collection with the name being verified (might have just been created).
+	- __`record`__`(params, git_info = {}, DB_addr = default_address)`:
+		- this functions enrich params with metadatas and record it in the corresponding file of the user's collection before run it.
+		- ___parameters:___
+			- `params`: dict, parameters read from `exp.json`.
+			- `git_info`: dict, necessary git information.
+			- `DB_addr`: string, MongoDB address.
+		- ___output___
+			- success flag and augmented params
+	- __`run`__`(params)`:
+		- switch to sand box directory and run the experiment code.
+		- ___parameters:___
+			- `params`: dict, augmented params of experiment.
+	- __`save_results`__`(file_name, params, DB_addr = default_address)`:
+		- save experiment results to corresponding file in the user's collection.
+		- ___parameters___:
+			- `file_name`: string, name of output file.
+			- `params`: dict, augmented params of experiment.
+			- `DB_addr`: string, MongoDB address.
+	- __`read`__`(file_name, git_info)`
+		- read experiment parameters and call `record()` and `run()` to proceed experiment.
+		- ___parameters___:
+			- `file_name`: string, file name to load experiment parameters.
+			- `git_info`: dict, necessary git information.
