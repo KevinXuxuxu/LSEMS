@@ -254,7 +254,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 - In file `data.py`:
 	- `class` __`Data`__:
 		- structure of a single MongoDB collection to manipulate on, super class of `DSData` and `ExpData`.
-		- `Data`.__`__init__`__`(self, Database, name)`:
+		- `Data`.__`\_\_init\_\_`__`(self, Database, name)`:
 			- construction of object `Data`
 			- ___parameters:___
 				- `Database`: `Database` object indicating the database using.
