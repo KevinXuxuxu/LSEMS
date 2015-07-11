@@ -254,23 +254,23 @@ This tutorial will lead you through the pipeline with examples of the system's k
 - In file `data.py`:
 	- `class` __`Data`__:
 		- structure of a single MongoDB collection to manipulate on, super class of `DSData` and `ExpData`.
-		- `Data`.__`\_\_init\_\_`__`(self, Database, name)`:
+		- `Data.__init__(self, Database, name)`:
 			- construction of object `Data`
 			- ___parameters:___
 				- `Database`: `Database` object indicating the database using.
 				- `name`: string, the name of the collection.
-		- `Data`.__`record`__`(self, _id, _dict)`:
+		- `Data.`__`record`__`(self, _id, _dict)`:
 			- update MongoDB file of id with dict.
 			- ___parameters:___
 				- `_id`: string, the identical id of the file.
 				- `_dict`: dict, the dict to update.
-		- `Data`.__`show`__`(self, _id)`:
+		- `Data.`__`show`__`(self, _id)`:
 			- show dile with particular id
 			- ___parameters:___
 				- `_id`: string, the identical id of the file.
 			- ___output:___
 				- the file required as a dict.
-		- `Data`.__`show_all`__`(self)`:
+		- `Data.`__`show_all`__`(self)`:
 			- show all files in the collection.
 			- ___output:___
 				- required files as a list of dicts.
@@ -326,7 +326,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- difference of experiment results in `DataFrame` object.
 	- `class` __`Database`__:
 		- structure of a MongoDB client connected to the server.
-		- `Database`.__`__init__`__`(self, db="datas", address = default_address)`:
+		- `Database.__init__.(self, db="datas", address = default_address)`:
 			- construction of object `Database`
 			- ___parameters:___
 				- `db`: string, database name in the MongoDB server.
@@ -359,7 +359,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `ExpData` or `DSData` object of  the data set.
 	- `class` __`View`__:
 		- providing joined view for datasets in database.
-		- `View`.__`__init__`__`(self, database, name, name_list=[], key="id")`
+		- `View.__init__(self, database, name, name_list=[], key="id")`
 			- construction of `View` object.
 			- ___parameters:___
 				- `database`: `Database` object
@@ -382,7 +382,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 	- query application build over `data.py`, with practical commands on databases.
 	- `class` __`Query`__:
 		- querier class holding all commands.
-		- `Query`.__`__init__`__`(self, name)`
+		- `Query.__init__(self, name)`
 			- construction of Query object
 			- ___parameters:___
 				- `name`: string, user name.
@@ -441,7 +441,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 	-  API for experiment codes in Python to generate formated output file for the system.
 	- `class` __`Outer`__:
 		- output container class.
-		- `Outer`.__`__init__`__`(self, file_name = "output")`
+		- `Outer.__init__(self, file_name = "output")`
 			- construction of `Outer` object.
 			- ___parameters:___
 				- `file_name`: string, name of the output file.
