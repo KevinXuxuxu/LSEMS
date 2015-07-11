@@ -434,3 +434,29 @@ As shown in the above graph, the management of data and metadata are on the left
 				- `expName` : string, The name of your experiment.
 			- ___output:___
 				- difference of experiment results in `DataFrame` object.
+
+### Output APIs
+
+- In file `outAPI.py`:
+	-  API for experiment codes in Python to generate formated output file for the system.
+	- `class` __`Outer`__:
+		- output container class.
+		- `Outer`.__`__init__`__`(self, file_name = "output")`
+			- construction of `Outer` object.
+			- ___parameters:___
+				- `file_name`: string, name of the output file.
+		- `Outer`.__`nout`__`(self, content)`:
+			- non json outputs, takes plain string.
+			- ___parameters:___
+				- `content`: string, plain text for output.
+		- `Outer`.__`jout_exp`__`(self, d)`:
+			- json outputs for whole experiment, takes dictionary(appending).
+			- ___parameters:___
+				- `d`: dict, output attributes.
+		- `Outer`.__`jout_expS`__`(self, a, b)`:
+			- json outputs for whole experiment, takes key-value pair.
+			- ___parameters:___
+				- `a`: key, output attributes name.
+				- `b`: value, output attribute value.
+		- `Outer`.__`generate`__`(self)`:
+			- generates output file according to put in data, with "`self.name`.json" for structured output, and "`self.name`.txt" for plain text.
