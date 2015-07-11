@@ -273,7 +273,7 @@ As shown in the above graph, the management of data and metadata are on the left
 		- `Data`.__`show_all`__`(self)`:
 			- show all files in the collection.
 			- ___output:___
-				- required files as a list.
+				- required files as a list of dicts.
 	- `class` __`DSData`__:
 		- structure of data set MongoDB collection, sub-class of `Data`.
 		- `DSData`.__`find_parent`__`(self)`:
@@ -302,11 +302,135 @@ As shown in the above graph, the management of data and metadata are on the left
 		- structure of a particular user and its experiment information, over a  MongoDB collection, sub-class of `Data`.
 		- `ExpData`.__`show_exp_names`__`(self)`:
 			- show all experiment names of the user.
-			- ___outputs:___
+			- ___output:___
 				- experiment names as a DataFrame object.
 		- `ExpData`.__`show_exp`__`(self, name)`:
 			- show information of a particular experiment.
 			- ___parameters:___
 				- `name`: string, the requested experiment name.
-			- ___outputs:___
+			- ___output:___
 				- experiment information as a `DataFrame` object.
+		- `ExpData`.__`diff`__`(self, exp_name, commit_id1="", commit_id2="", show=[])`:
+			- find difference in parameters of an experiment over different times of experiment.
+			- ___parameters:___
+				- `exp_name`: string, the requested name of the experiment.
+				- `commit_id1` and `commit_id2`: string,  commit ids to compare over. Take the latest two commits when left blank.
+				- `show`: list of strings, attributes hope to show. Show all when passed empty list.
+			- ___output:___
+				- difference of experiment information in `DataFrame` object.
+		- `ExpData`.__`diff_result`__`(self, exp_name, commit_id1='', commit_id2='')`:
+			- ___parameters:___
+				- `exp_name`: string, the requested name of the experiment.
+				- `commit_id1` and `commit_id2`: string,  commit ids to compare over. Take the latest two commits when left blank.
+			- ___output:___
+				- difference of experiment results in `DataFrame` object.
+	- `class` __`Database`__:
+		- structure of a MongoDB client connected to the server.
+		- `Database`.__`__init__`__`(self, db="datas", address = default_address)`:
+			- construction of object `Database`
+			- ___parameters:___
+				- `db`: string, database name in the MongoDB server.
+				- `address`: string, the server address.
+		- `Database`.__`import_data`__`(self, name, description="", parent="", ignore=[], it=None, _type="")`:
+			- import data sets into the database. For now only `*sv` (e.g. CSV, TSV) format are supported. User defined import iterator are allowed into the function.
+			- ___parameters:___
+				- `name`: string, file name of the data to be imported.
+				- `description`: string, description of the data set.
+				- `parent`: string, the name of the data set it derived from.
+				- `ignore`: list of string, names of attributes not to import into the database. This is important for the system to tell which part of the file is data or metadata. Main volume of data should not be imported into the database.
+				- `it`: class, the import iterator class user defined to import alternative type of data.
+				- `_type`: string, the type of data set, e.g. "csv", "image"
+		- `Database`.__`generate_data`__`(self, name, description="", parent="", ignore=[])`:
+			- used when new data set is generated from old one, including copying new data file to correct place.
+			- ___parameters:___ see `Database.import_data()`
+		- `Database`.__`join`__`(self, name, name_list=[], key='_id')`:
+			- create joined view of for two data sets in the database. Only collections in database `datas` is allowed.
+			- ___parameters:___
+				- `name`: string, name of the base data set.
+				- `name_list`: list of string, names of data sets to be joined.
+				- `key`: string, the main key of the join operation.
+			- ___output:___
+				- joined datas as a list of ditcs.
+		- `Database`.__`get_data`__`(self, name)`:
+			- get one data set from the database.
+			- ___parameters:___
+				- `name`: string, name of requesting data set.
+			- ___output:___
+				- `ExpData` or `DSData` object of  the data set.
+	- `class` __`View`__:
+		- providing joined view for datasets in database.
+		- `View`.__`__init__`__`(self, database, name, name_list=[], key="id")`
+			- construction of `View` object.
+			- ___parameters:___
+				- `database`: `Database` object
+				- `name`: string, name of the base data set.
+				- `name_list`: list of string, names of data sets to be joined.
+				- `key`: string, the main key of the join operation.
+		- `View`.__`get`__`(self, pair)`:
+			- conduct lazy evaluation on the file containing certain key-value pair.
+			- ___parameters:___
+				- `pair`: dict, key-value pair for MongoDB to search for file.
+			- ___output:___
+				- requested MongoDB file as a dict.
+		- `View`.__`dump`__`(self)`:
+			- dump the whole joint view.
+			- ___output:___
+				- joint view as list of dicts.
+		- `View`.__`dump_df`__`(self)`:
+			- dump joint view as `DataFrame`.
+- In file `query.py`:
+	- query application build over `data.py`, with practical commands on databases.
+	- `class` __`Query`__:
+		- querier class holding all commands.
+		- `Query`.__`__init__`__`(self, name)`
+			- construction of Query object
+			- ___parameters:___
+				- `name`: string, user name.
+		- `Query`.__`showData`__`(self, dataName = None, attribute = None)`:
+			- Show all the name of data sets or one specific data set.
+			- ___parameters:___
+				- `dataName` : string, The name of one specific data set.
+				- `attribute` : string, The attribute of thie data set.
+			- ___output:___
+				- data set names as list of strings.
+		- `Query`.__`showDataDescription`__`(self, dataName = None, attribute = None)`:
+			- Show the description of one data set.
+			- ___parameters:___
+				- `dataName` : string, The name of this data set.
+				- `attribute` : string, The attribute of your data description.
+			- ___output:___
+				- data set information as a `DataFrame` object.
+		- `Query`.__`showUser`__`(self)`
+			- Show all the users in the system.
+			- ___output:___
+				- users' names in the database as a `DataFrame` object.
+		- `Query`.__`showMyExp`__`(self, exp_name = None, attribute = None)`:
+			- Show all your experiment records.
+			- ___parameters:___
+				- `exp_name` : string, The name of your experiment.
+				- `attribute` : string, The attribute of your experiment information.
+			- ___output:___
+				- experiment records as a `DataFrame` object.
+		- `Query`.__`importData`__`(self, dataName = None, description = "", parent = "", ignore = [], it = None, _type = "")`:
+			- Import your data set into system.
+			- ___parameters:___
+				- `dataName` : string, The name of your data set (with dir path).
+				- `description` : string, The description of this data set.
+				- `parent` : string, Paratent data set of this new data set.
+				- `ignore` : list, Attributes that want to be ignored.
+				- `it` : class file, The python class to import data iteratively.
+				- `_type` : string, The type of import data set.
+		- `Query`.__`joinView`__`(self, dataName, name_list, key)`:
+			- Joint two or more datasets with a specific key.
+			- ___parameters:___
+				- `dataName` : string, the name of dataset you want to be joined.
+				- `name_list` : list, The name list of datasets you want to join.
+				- `key` : string, The primary key.
+			- ___output:___
+				- dumped joint view as a `DataFrame` object.
+		- `Query`.__`diffExp`__`(self, expName = None)`:
+			- Check the difference between the last two experiments.
+			- ___parameters:___
+				- `expName` : string, The name of your experiment.
+			- ___output:___
+				- difference of experiment results in `DataFrame` object.
