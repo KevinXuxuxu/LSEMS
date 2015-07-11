@@ -248,3 +248,65 @@ As shown in the above graph, the management of data and metadata are on the left
 		- ___parameters___:
 			- `file_name`: string, file name to load experiment parameters.
 			- `git_info`: dict, necessary git information.
+
+### Data Management
+
+- In file `data.py`:
+	- `class` __`Data`__:
+		- structure of a single MongoDB collection to manipulate on, super class of `DSData` and `ExpData`.
+		- `Data`.__`__init__`__`(self, Database, name)`:
+			- construction of object `Data`
+			- ___parameters:___
+				- `Database`: `Database` object indicating the database using.
+				- `name`: string, the name of the collection.
+		- `Data`.__`record`__`(self, _id, _dict)`:
+			- update MongoDB file of id with dict.
+			- ___parameters:___
+				- `_id`: string, the identical id of the file.
+				- `_dict`: dict, the dict to update.
+		- `Data`.__`show`__`(self, _id)`:
+			- show dile with particular id
+			- ___parameters:___
+				- `_id`: string, the identical id of the file.
+			- ___output:___
+				- the file required as a dict.
+		- `Data`.__`show_all`__`(self)`:
+			- show all files in the collection.
+			- ___output:___
+				- required files as a list.
+	- `class` __`DSData`__:
+		- structure of data set MongoDB collection, sub-class of `Data`.
+		- `DSData`.__`find_parent`__`(self)`:
+			- find where the data set derived from, if there's any.
+			- ___output:___
+				- name of the parent data set as string, `None` if no parent.
+		- `DSData`.__`find_root`__`(self)`:
+			- find the origin of the data set.
+			- ___output:___
+				- name of the root data set as string, `None` if no parent.
+		- `DSData`.__`show_info`__`(self)`:
+			- return the information of the data set.
+			- ___output:___
+				- information of the data set as a `DataFrame` object.
+		- `DSData`.__`show_data`__`(self)`:
+			- return the datas in the data set.
+			- ___output:___
+				- files in the data set (a MongoDB collection object) as a `DataFrame` object.
+		- `DSData`.__`diff`__`(self, commit_id1="", commit_id2="")`
+			- find the difference in attributes of this data set over different times of experiments.
+			- ___parameters:___
+				- `commit_id1` and `commit_id2`: string, indicating the different times of experiments. Take the latest two commits when left blank.
+			- ___output:___
+				- difference in attributes as a `DataFrame` object.
+	- `class` __`ExpData`__:
+		- structure of a particular user and its experiment information, over a  MongoDB collection, sub-class of `Data`.
+		- `ExpData`.__`show_exp_names`__`(self)`:
+			- show all experiment names of the user.
+			- ___outputs:___
+				- experiment names as a DataFrame object.
+		- `ExpData`.__`show_exp`__`(self, name)`:
+			- show information of a particular experiment.
+			- ___parameters:___
+				- `name`: string, the requested experiment name.
+			- ___outputs:___
+				- experiment information as a `DataFrame` object.
