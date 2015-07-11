@@ -276,41 +276,41 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- required files as a list of dicts.
 	- `class` __`DSData`__:
 		- structure of data set MongoDB collection, sub-class of `Data`.
-		- `DSData`.__`find_parent`__`(self)`:
+		- `DSData.`__`find_parent`__`(self)`:
 			- find where the data set derived from, if there's any.
 			- ___output:___
 				- name of the parent data set as string, `None` if no parent.
-		- `DSData`.__`find_root`__`(self)`:
+		- `DSData.`__`find_root`__`(self)`:
 			- find the origin of the data set.
 			- ___output:___
 				- name of the root data set as string, `None` if no parent.
-		- `DSData`.__`show_info`__`(self)`:
+		- `DSData.`__`show_info`__`(self)`:
 			- return the information of the data set.
 			- ___output:___
 				- information of the data set as a `DataFrame` object.
-		- `DSData`.__`show_data`__`(self)`:
+		- `DSData.`__`show_data`__`(self)`:
 			- return the datas in the data set.
 			- ___output:___
 				- files in the data set (a MongoDB collection object) as a `DataFrame` object.
-		- `DSData`.__`diff`__`(self, commit_id1="", commit_id2="")`
+		- `DSData.`__`diff`__`(self, commit_id1="", commit_id2="")`
 			- find the difference in attributes of this data set over different times of experiments.
 			- ___parameters:___
 				- `commit_id1` and `commit_id2`: string, indicating the different times of experiments. Take the latest two commits when left blank.
 			- ___output:___
 				- difference in attributes as a `DataFrame` object.
 	- `class` __`ExpData`__:
-		- structure of a particular user and its experiment information, over a  MongoDB collection, sub-class of `Data`.
-		- `ExpData`.__`show_exp_names`__`(self)`:
+		- structure of a particular user and its experiment information, over a  MongoDB collection, sub-class of `Data.`
+		- `ExpData.`__`show_exp_names`__`(self)`:
 			- show all experiment names of the user.
 			- ___output:___
 				- experiment names as a DataFrame object.
-		- `ExpData`.__`show_exp`__`(self, name)`:
+		- `ExpData.`__`show_exp`__`(self, name)`:
 			- show information of a particular experiment.
 			- ___parameters:___
 				- `name`: string, the requested experiment name.
 			- ___output:___
 				- experiment information as a `DataFrame` object.
-		- `ExpData`.__`diff`__`(self, exp_name, commit_id1="", commit_id2="", show=[])`:
+		- `ExpData.`__`diff`__`(self, exp_name, commit_id1="", commit_id2="", show=[])`:
 			- find difference in parameters of an experiment over different times of experiment.
 			- ___parameters:___
 				- `exp_name`: string, the requested name of the experiment.
@@ -318,7 +318,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `show`: list of strings, attributes hope to show. Show all when passed empty list.
 			- ___output:___
 				- difference of experiment information in `DataFrame` object.
-		- `ExpData`.__`diff_result`__`(self, exp_name, commit_id1='', commit_id2='')`:
+		- `ExpData.`__`diff_result`__`(self, exp_name, commit_id1='', commit_id2='')`:
 			- ___parameters:___
 				- `exp_name`: string, the requested name of the experiment.
 				- `commit_id1` and `commit_id2`: string,  commit ids to compare over. Take the latest two commits when left blank.
@@ -331,7 +331,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 			- ___parameters:___
 				- `db`: string, database name in the MongoDB server.
 				- `address`: string, the server address.
-		- `Database`.__`import_data`__`(self, name, description="", parent="", ignore=[], it=None, _type="")`:
+		- `Database.`__`import_data`__`(self, name, description="", parent="", ignore=[], it=None, _type="")`:
 			- import data sets into the database. For now only `*sv` (e.g. CSV, TSV) format are supported. User defined import iterator are allowed into the function.
 			- ___parameters:___
 				- `name`: string, file name of the data to be imported.
@@ -340,10 +340,10 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `ignore`: list of string, names of attributes not to import into the database. This is important for the system to tell which part of the file is data or metadata. Main volume of data should not be imported into the database.
 				- `it`: class, the import iterator class user defined to import alternative type of data.
 				- `_type`: string, the type of data set, e.g. "csv", "image"
-		- `Database`.__`generate_data`__`(self, name, description="", parent="", ignore=[])`:
+		- `Database.`__`generate_data`__`(self, name, description="", parent="", ignore=[])`:
 			- used when new data set is generated from old one, including copying new data file to correct place.
 			- ___parameters:___ see `Database.import_data()`
-		- `Database`.__`join`__`(self, name, name_list=[], key='_id')`:
+		- `Database.`__`join`__`(self, name, name_list=[], key='_id')`:
 			- create joined view of for two data sets in the database. Only collections in database `datas` is allowed.
 			- ___parameters:___
 				- `name`: string, name of the base data set.
@@ -351,7 +351,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `key`: string, the main key of the join operation.
 			- ___output:___
 				- joined datas as a list of ditcs.
-		- `Database`.__`get_data`__`(self, name)`:
+		- `Database.`__`get_data`__`(self, name)`:
 			- get one data set from the database.
 			- ___parameters:___
 				- `name`: string, name of requesting data set.
@@ -366,17 +366,17 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `name`: string, name of the base data set.
 				- `name_list`: list of string, names of data sets to be joined.
 				- `key`: string, the main key of the join operation.
-		- `View`.__`get`__`(self, pair)`:
+		- `View.`__`get`__`(self, pair)`:
 			- conduct lazy evaluation on the file containing certain key-value pair.
 			- ___parameters:___
 				- `pair`: dict, key-value pair for MongoDB to search for file.
 			- ___output:___
 				- requested MongoDB file as a dict.
-		- `View`.__`dump`__`(self)`:
+		- `View.`__`dump`__`(self)`:
 			- dump the whole joint view.
 			- ___output:___
 				- joint view as list of dicts.
-		- `View`.__`dump_df`__`(self)`:
+		- `View.`__`dump_df`__`(self)`:
 			- dump joint view as `DataFrame`.
 - In file `query.py`:
 	- query application build over `data.py`, with practical commands on databases.
@@ -386,32 +386,32 @@ This tutorial will lead you through the pipeline with examples of the system's k
 			- construction of Query object
 			- ___parameters:___
 				- `name`: string, user name.
-		- `Query`.__`showData`__`(self, dataName = None, attribute = None)`:
+		- `Query.`__`showData`__`(self, dataName = None, attribute = None)`:
 			- Show all the name of data sets or one specific data set.
 			- ___parameters:___
 				- `dataName` : string, The name of one specific data set.
 				- `attribute` : string, The attribute of thie data set.
 			- ___output:___
 				- data set names as list of strings.
-		- `Query`.__`showDataDescription`__`(self, dataName = None, attribute = None)`:
+		- `Query.`__`showDataDescription`__`(self, dataName = None, attribute = None)`:
 			- Show the description of one data set.
 			- ___parameters:___
 				- `dataName` : string, The name of this data set.
 				- `attribute` : string, The attribute of your data description.
 			- ___output:___
 				- data set information as a `DataFrame` object.
-		- `Query`.__`showUser`__`(self)`
+		- `Query.`__`showUser`__`(self)`
 			- Show all the users in the system.
 			- ___output:___
 				- users' names in the database as a `DataFrame` object.
-		- `Query`.__`showMyExp`__`(self, exp_name = None, attribute = None)`:
+		- `Query.`__`showMyExp`__`(self, exp_name = None, attribute = None)`:
 			- Show all your experiment records.
 			- ___parameters:___
 				- `exp_name` : string, The name of your experiment.
 				- `attribute` : string, The attribute of your experiment information.
 			- ___output:___
 				- experiment records as a `DataFrame` object.
-		- `Query`.__`importData`__`(self, dataName = None, description = "", parent = "", ignore = [], it = None, _type = "")`:
+		- `Query.`__`importData`__`(self, dataName = None, description = "", parent = "", ignore = [], it = None, _type = "")`:
 			- Import your data set into system.
 			- ___parameters:___
 				- `dataName` : string, The name of your data set (with dir path).
@@ -420,7 +420,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `ignore` : list, Attributes that want to be ignored.
 				- `it` : class file, The python class to import data iteratively.
 				- `_type` : string, The type of import data set.
-		- `Query`.__`joinView`__`(self, dataName, name_list, key)`:
+		- `Query.`__`joinView`__`(self, dataName, name_list, key)`:
 			- Joint two or more datasets with a specific key.
 			- ___parameters:___
 				- `dataName` : string, the name of dataset you want to be joined.
@@ -428,7 +428,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `key` : string, The primary key.
 			- ___output:___
 				- dumped joint view as a `DataFrame` object.
-		- `Query`.__`diffExp`__`(self, expName = None)`:
+		- `Query.`__`diffExp`__`(self, expName = None)`:
 			- Check the difference between the last two experiments.
 			- ___parameters:___
 				- `expName` : string, The name of your experiment.
@@ -445,18 +445,18 @@ This tutorial will lead you through the pipeline with examples of the system's k
 			- construction of `Outer` object.
 			- ___parameters:___
 				- `file_name`: string, name of the output file.
-		- `Outer`.__`nout`__`(self, content)`:
+		- `Outer.`__`nout`__`(self, content)`:
 			- non json outputs, takes plain string.
 			- ___parameters:___
 				- `content`: string, plain text for output.
-		- `Outer`.__`jout_exp`__`(self, d)`:
+		- `Outer.`__`jout_exp`__`(self, d)`:
 			- json outputs for whole experiment, takes dictionary(appending).
 			- ___parameters:___
 				- `d`: dict, output attributes.
-		- `Outer`.__`jout_expS`__`(self, a, b)`:
+		- `Outer.`__`jout_expS`__`(self, a, b)`:
 			- json outputs for whole experiment, takes key-value pair.
 			- ___parameters:___
 				- `a`: key, output attributes name.
 				- `b`: value, output attribute value.
-		- `Outer`.__`generate`__`(self)`:
+		- `Outer.`__`generate`__`(self)`:
 			- generates output file according to put in data, with "`self.name`.json" for structured output, and "`self.name`.txt" for plain text.
