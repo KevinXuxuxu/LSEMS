@@ -2,6 +2,15 @@
 > This is the manual for LSEMS (Data Hub system)
 > > LSEMS stands for Large Scale Experiment Management System
 
+##Introduction
+
+###Background
+This project is initially determined to run a Bioinformatics experiment in large scale systems for efficiency. It involves multiple stages of image processing followed by a machine learning process. As a result, some image processing application is integrated into system, e.g. _Fiji_ and _EBImage_ (in R).
+
+###Purpose
+In this project, we introduce an integrated solution to the management and analysis of data mining and machine learning experiments in Bioinformatics and other fields. The purpose of the system is to manage experiment (information of the experiment), metadata (experiment results, etc.) and data sets in a more organised and logical way, with the help of multiple open source projects: a version control system to handle experiment/code logic (e.g. Gitlab) and a NoSQL database with designed data structure to handle metadata and data sets (e.g. MongoDB). Such logics include but not limited to experiment code versioning, data set lineage and joint view. Further more, the system has a strong expandability for experiments with different environment demands. Various languages are supported and large scale distributed computing system (e.g. Hadoop & Spark) are also available for faster processing speed on big datas.
+
+
 ##Structure
 The system is developed on two open source project:
 
