@@ -149,10 +149,14 @@ def run(params):
         command = ""
         if params['type'] == 'python':
             command += 'python'
-        command += " "+src
-        for p in params['param']:
-            command += " --"+p+"="+str(params['param'][p])
-        command += ' > output'
+            command += " "+src
+            for p in params['param']:
+                command += " --"+p+"="+str(params['param'][p])
+            command += ' > output'
+        elif params['type'] == 'R':
+            command += 'R CMD BATCH ' + src
+            for p in params['param']:
+                command += " --"+p+"="+str(params['param'][p])
         print command
         os.system(command)
         mgdb = data.Database()
