@@ -2,6 +2,14 @@
 > This is the manual for LSEMS (Data Hub system)
 > > LSEMS stands for Large Scale Experiment Management System
 
+##Navigate
+- [Introduction](https://github.com/KevinXuxuxu/LSEMS#introduction)
+- [Structure](https://github.com/KevinXuxuxu/LSEMS#structure)
+- [Pipeline](https://github.com/KevinXuxuxu/LSEMS#pipeline)
+- [Data Model](https://github.com/KevinXuxuxu/LSEMS#data-model)
+- [Tutorial](https://github.com/KevinXuxuxu/LSEMS#tutorial)
+- [Code Documentation](https://github.com/KevinXuxuxu/LSEMS#code-documentation)
+
 ##Introduction
 
 ###Background
