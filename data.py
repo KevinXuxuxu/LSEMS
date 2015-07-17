@@ -25,12 +25,30 @@ class Data:
         self.name = name
 
     def record(self, _id, _dict):
+        """
+            update MongoDB file of id with dict.
+            parameters:
+                _id: string, the identical id of the file.
+                _dict: dict, the dict to update.
+        """
         self.db.update({'id': _id}, {'$set': _dict})
 
     def show(self, _id):
+        """
+            show dile with particular id
+            parameters:
+                _id: string, the identical id of the file.
+            output:
+                the file required as a dict.
+        """
         return self.db.find_one({'id': _id})
 
     def show_all(self):
+        """
+            show all files in the collection.
+            output:
+                required files as a list of dicts.
+        """
         rtn = []
         for i in self.db.find():
             i.pop('_id')
