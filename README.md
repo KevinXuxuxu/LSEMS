@@ -484,3 +484,16 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `b`: value, output attribute value.
 		- `Outer.`__`generate`__`(self)`:
 			- generates output file according to put in data, with "`self.name`.json" for structured output, and "`self.name`.txt" for plain text.
+
+#### Usage of `outAPI.py`
+
+- `outAPI.py` is help coder output experiment results (including results in the whole and results on individual data points.) in a particular format that is adaptable to the system. The output file should be a `json` file with format described below (replace things inside `[]` with actual data):
+
+        { "exp": { [results of experiment as a whole in key-value pairs] },
+          "dp": [ {"id": [unique id], [results of individual data points in key-value pairs] },
+                  {"id": [unique id], [results of individual data points in key-value pairs] },
+                  ...
+                ]
+        }
+
+For languages like `Matlab` and `R` for which we don't have outAPI support yet, it will also work as long as experiment results are output in the above format manually.
