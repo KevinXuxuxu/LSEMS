@@ -170,7 +170,7 @@ class Database:
         self.DB = client[db]
         self.name = db
 
-    def import_data(self, name, description="", parent="", ignore=[], it=None, **kwargs):
+    def import_data(self, name, description="", parent="", ignore=[], it=None, _type='', **kwargs):
         if self.DB.name != 'datas':
             print "should not import data into db other than 'datas'!"
             return
