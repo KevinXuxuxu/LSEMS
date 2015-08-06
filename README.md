@@ -355,7 +355,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 			- ___parameters:___
 				- `db`: string, database name in the MongoDB server.
 				- `address`: string, the server address.
-		- `Database.`__`import_data`__`(self, name, description="", parent="", ignore=[], it=None, _type="")`:
+		- `Database.`__`import_data`__`(self, name, description="", parent="", ignore=[], it=None, _type='', **kwargs)`:
 			- import data sets into the database. For now only `*sv` (e.g. CSV, TSV) format are supported. User defined import iterator are allowed into the function.
 			- ___parameters:___
 				- `name`: string, file name of the data to be imported.
@@ -364,6 +364,7 @@ This tutorial will lead you through the pipeline with examples of the system's k
 				- `ignore`: list of string, names of attributes not to import into the database. This is important for the system to tell which part of the file is data or metadata. Main volume of data should not be imported into the database.
 				- `it`: class, the import iterator class user defined to import alternative type of data.
 				- `_type`: string, the type of data set, e.g. "csv", "image"
+				- `**kwargs`: keyword arguments that used to construct instance of the self-defined import class.
 		- `Database.`__`generate_data`__`(self, name, description="", parent="", ignore=[])`:
 			- used when new data set is generated from old one, including copying new data file to correct place.
 			- ___parameters:___ see `Database.import_data()`
