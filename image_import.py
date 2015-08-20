@@ -23,13 +23,13 @@ def random_id():
 
 class ImageSet:
 
-    def __init__(self, name, _type):
-        self.name = name
-        self.type = _type
-        if name not in os.listdir('.'):
+    def __init__(self, _name):
+        #self.name = name
+        #self.type = __type
+        if _name not in os.listdir('.'):
             raise Exception("No such image set in dir: "+os.getcwd())
         self.name_list = []
-        for name in os.listdir(name):
+        for name in os.listdir(_name):
             if not name.startswith('.'):
                 self.name_list.append(name)
         self.i = 0
@@ -45,7 +45,7 @@ class ImageSet:
             i = self.i
             self.i += 1
             d['name'] = self.name_list[i]
-            d['type'] = self.type
+            #d['type'] = self.type
             d['id'] = random_id()
             return d
         else:
