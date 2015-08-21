@@ -56,6 +56,7 @@ def record(params, git_info = {}):
         this functions takes in a dictionary as parameters
         and record it in the MongoDB before run it.
     """
+    print "recording..."
     config = json.load(open("./config.json"))
 
     try:
@@ -133,6 +134,7 @@ def save_results(file_name, params):
         print "Aborting..."
 
 def run(params):
+    print "running"
     old_dir = os.getcwd()
     tmp = re.split('/', old_dir)
     sb_dir = "/%s/%s/sandbox" %(tmp[1],tmp[2])
