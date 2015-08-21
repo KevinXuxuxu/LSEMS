@@ -57,10 +57,10 @@ def record(params, git_info = {}):
         and record it in the MongoDB before run it.
     """
     print "recording..."
-    config = json.load(open("~/sandbox/config.json"))
 
     try:
         # connect to MongoDB
+        config = json.load(open("~/sandbox/config.json"))
         try:
             client = MongoClient(config["mongodb_url"])
         except Exception as e:
@@ -99,9 +99,8 @@ def save_results(file_name, params):
     results = load(fp)
     print "Loaded output file"
 
-    config = json.load(open('~/sandbox/config.json'))
-
     try:
+        config = json.load(open('~/sandbox/config.json'))
         client = MongoClient(config['mongodb_url'])
         if results.has_key("exp"):
             user = client['users'][params['name']]
