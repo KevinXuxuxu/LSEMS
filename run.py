@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import data
+import json
 
 def verifyUser(client, name):
     """
@@ -50,16 +51,17 @@ def random_commit_id():
         rtn += chr(ri+48)
     return rtn
 
-def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
+def record(params, git_info = {}):
     """
         this functions takes in a dictionary as parameters
         and record it in the MongoDB before run it.
     """
+    config = json.load(open("./config.json"))
 
     try:
         # connect to MongoDB
         try:
-            client = MongoClient(DB_addr)
+            client = MongoClient(config["mongodb_url"])
         except Exception as e:
             raise Exception("fail to connect to given MongoDB address: " + DB_addr)
 
@@ -91,13 +93,15 @@ def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
         print "Aborting..."
         return False,{}
 
-def save_results(file_name, params, DB_addr="10.2.2.137:27017"):
+def save_results(file_name, params):
     fp = open(file_name,'r')
     results = load(fp)
     print "Loaded output file"
 
+    config = json.load(open('./config.json'))
+
     try:
-        client = MongoClient(DB_addr)
+        client = MongoClient(config['mongodb_url'])
         if results.has_key("exp"):
             user = client['users'][params['name']]
             repo = user.find_one({'exp_name': params['repo_name']})
