@@ -90,7 +90,7 @@ def record(params, git_info = {}):
         client.close()
         return True,params
     except Exception as e:
-        print e.message
+        print e
         print "Aborting..."
         return False,{}
 
