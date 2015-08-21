@@ -165,7 +165,10 @@ class Database:
     """
         structure of a database
     """
-    def __init__(self, db="datas", address="10.2.2.137:27017"):
+    def __init__(self, db="datas", address=""):
+        if address == "":
+            config = load(open(os.environ.get("HOME") + "/sandbox/config.json"))
+            address = config['mongodb_url']
         client = MongoClient(address)
         self.DB = client[db]
         self.name = db
