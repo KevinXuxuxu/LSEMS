@@ -167,7 +167,7 @@ class Database:
     """
     def __init__(self, db="datas", address=""):
         if address == "":
-            config = load(open(os.environ.get("HOME") + "/sandbox/config.json"))
+            config = json.load(open(os.environ.get("HOME") + "/sandbox/config.json"))
             address = config['mongodb_url']
         client = MongoClient(address)
         self.DB = client[db]
