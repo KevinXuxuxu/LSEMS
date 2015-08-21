@@ -60,7 +60,7 @@ def record(params, git_info = {}):
 
     try:
         # connect to MongoDB
-        config = json.load(open("~/sandbox/config.json"))
+        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
         try:
             client = MongoClient(config["mongodb_url"])
         except Exception as e:
@@ -100,7 +100,7 @@ def save_results(file_name, params):
     print "Loaded output file"
 
     try:
-        config = json.load(open('~/sandbox/config.json'))
+        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
         client = MongoClient(config['mongodb_url'])
         if results.has_key("exp"):
             user = client['users'][params['name']]
