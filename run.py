@@ -129,7 +129,7 @@ def save_results(file_name, params):
 
                 # data.update({'id': r.pop('id')}, {'$set': {params['commit_id']: r }})
     except Exception as e:
-        print e.message
+        print e
         print "Aborting..."
 
 def run(params):
