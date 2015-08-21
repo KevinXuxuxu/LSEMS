@@ -64,7 +64,7 @@ def record(params, git_info = {}, DB_addr = "10.2.2.137:27017"):
             raise Exception("fail to connect to given MongoDB address: " + DB_addr)
 
         # check and run the thing
-        missing = checkKeys(params, ['data_set', 'src', 'type', 'param', 'out'])
+        missing = checkKeys(params, ['data_set', 'src', 'type', 'param'])
         if len(missing) != 0:
             raise Exception("missing attribute"+('s' if len(missing)!=1 else '')+": "+str(missing))
 
@@ -157,8 +157,9 @@ def run(params):
         os.system(command)
         mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
-        for out_file in re.split(' ', params['out']):
-            mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
+        if params.has_key('out'):
+            for out_file in re.split(' ', params['out']):
+                mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
         os.system('cp output.txt ~')
         os.system('cp output.json ~')
