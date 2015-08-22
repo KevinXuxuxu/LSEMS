@@ -159,7 +159,14 @@ def run(params):
             command += " --"+p+"="+str(params['param'][p])
         command += ' > output'
         print command
+        # set env-variable for spark-cluster
+        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+        os.system("export MASTER="+config['spark_master'])
+        # running command
         os.system(command)
+        # unset env-variable
+        os.system('unset MASTER')
+
         mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
         if params.has_key('out'):
