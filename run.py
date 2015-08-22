@@ -154,6 +154,8 @@ def run(params):
         command = ""
         if params['type'] == 'python':
             command += 'python'
+        elif params['type'] == 'pyspark':
+            command += 'pyspark'
         command += " "+src
         for p in params['param']:
             command += " --"+p+"="+str(params['param'][p])
