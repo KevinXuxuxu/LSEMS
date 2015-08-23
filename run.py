@@ -177,7 +177,7 @@ def run(params):
             for out_file in re.split(' ', params['out']):
                 mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
-        os.system('cp output.txt ~')
+        os.system('cp output ~')
         os.system('cp output.json ~')
         print "recording outputs"
         save_results('output.json', params)
