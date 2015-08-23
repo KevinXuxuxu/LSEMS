@@ -153,13 +153,15 @@ def run(params):
         os.chdir(dir_name)
         command = ""
         if params['type'] == 'python':
-            command += 'python'
+            command += 'python '+src
+            for p in params['param']:
+                command += " --"+p+"="+str(params['param'][p])
+            command += ' > output'
         elif params['type'] == 'pyspark':
-            command += 'pyspark'
-        command += " "+src
-        for p in params['param']:
-            command += " --"+p+"="+str(params['param'][p])
-        command += ' > output'
+            command += 'pyspark '+src
+            json.dump({'param': params['param']}, open('exp.json', 'w'))
+            command += ' > output'
+
         print command
         # set env-variable for spark-cluster
         config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
