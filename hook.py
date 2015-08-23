@@ -84,6 +84,12 @@ class index:
             print e.message
         os.chdir('../..')
 
+class MyApplication(web.application):
+    def run(self, port=8080, *middleware):
+        func = self.wsgifunc(*middleware)
+        return web.httpserver.runsimple(func, ('0.0.0.0', port))
+
 if __name__ == "__main__":
-    app = web.application(urls, globals())
-    app.run()
+    app = MyApplication(urls, globals())
+    config = json.load(os.environ.get("HOME") + '/sandbox/config.json')
+    app.run(port = config['hook_port'])
