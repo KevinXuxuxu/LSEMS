@@ -91,5 +91,5 @@ class MyApplication(web.application):
 
 if __name__ == "__main__":
     app = MyApplication(urls, globals())
-    config = json.load(os.environ.get("HOME") + '/sandbox/config.json')
+    config = json.load(open(os.environ.get("HOME") + '/sandbox/config.json'))
     app.run(port = config['hook_port'])
