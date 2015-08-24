@@ -158,18 +158,16 @@ def run(params):
                 command += " --"+p+"="+str(params['param'][p])
             command += ' > output'
         elif params['type'] == 'pyspark':
-            command += 'pyspark '+src
+            # set env-variable for spark-cluster
+            config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+            spark_master_config = "MASTER=" + config['spark_master']
+            command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
             json.dump({'param': params['param']}, open('exp.json', 'w'))
             command += ' > output'
 
         print command
-        # set env-variable for spark-cluster
-        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
-        os.system("export MASTER="+config['spark_master'])
         # running command
         os.system(command)
-        # unset env-variable
-        os.system('unset MASTER')
 
         mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
