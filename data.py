@@ -196,7 +196,7 @@ class Database:
                         raise Exception("no id attribute!")
                     coll.insert(i)
             except Exception as e:
-                print e.message
+                print e
                 print 'Aborting'
         elif len(t) == 2 and t[-1] in ['csv','tsv']:
             # it's csv or tsv file
@@ -226,8 +226,26 @@ class Database:
                             f[title[i]]=v[i]
                     coll.insert(f)
             except Exception as e:
-                print e.message
+                print e
                 print 'Aborting...'
+        elif len(t) == 2 and t[-1] == 'json':
+            try:
+                coll = self.DB.create_collection(t[0])
+                if parent != "" and parent not in self.DB.collection_names():
+                    raise Exception("parent data set not in DB!")
+                coll.insert({'_id': 'info',
+                            'name':t[0],
+                            'type':t[-1],
+                            'path':'~/sandbox/data/'+name,
+                            'description': description,
+                            'parent': parent,
+                            'commit_ids': []})
+                l = json.load(open(name))
+                for d in l:
+                    coll.insert(d)
+            except Exception as e:
+                print e
+                print "Aborting..."
 
     def generate_data(self, name, description="", parent="", ignore=[]):
         if name not in os.listdir('.'):

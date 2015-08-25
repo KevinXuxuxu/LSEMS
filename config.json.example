@@ -1,3 +1,4 @@
 {"mongodb_url": "fzmongodb.dhcp.lbl.gov:27017",
  "gitlab_url": "fzgitlab.dhcp.lbl.gov",
- "spark_master": "spark://fzspark1.dhcp.lbl.gov:7077"}
+ "spark_master": "spark://fzspark1.dhcp.lbl.gov:7077",
+ "hook_port": 1234}

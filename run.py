@@ -153,21 +153,21 @@ def run(params):
         os.chdir(dir_name)
         command = ""
         if params['type'] == 'python':
-            command += 'python'
+            command += 'python '+src
+            for p in params['param']:
+                command += " --"+p+"="+str(params['param'][p])
+            command += ' > output'
         elif params['type'] == 'pyspark':
-            command += 'pyspark'
-        command += " "+src
-        for p in params['param']:
-            command += " --"+p+"="+str(params['param'][p])
-        command += ' > output'
+            # set env-variable for spark-cluster
+            config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+            spark_master_config = "MASTER=" + config['spark_master']
+            command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
+            json.dump({'param': params['param']}, open('exp.json', 'w'))
+            command += ' > output'
+
         print command
-        # set env-variable for spark-cluster
-        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
-        os.system("export MASTER="+config['spark_master'])
         # running command
         os.system(command)
-        # unset env-variable
-        os.system('unset MASTER')
 
         mgdb = data.Database()
         parent = re.split('\.', params['data_set'])[0]
@@ -175,7 +175,7 @@ def run(params):
             for out_file in re.split(' ', params['out']):
                 mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
-        os.system('cp output.txt ~')
+        os.system('cp output ~')
         os.system('cp output.json ~')
         print "recording outputs"
         save_results('output.json', params)
