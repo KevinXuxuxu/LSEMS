@@ -38,7 +38,7 @@ class index:
             if "no run" in commit['message']:
                 no_run = True
         if no_run:
-            return
+            return "Done."
 
         #lock.acquire()
         #if ( not block.has_key(name) ) or len(block[name]) == 0:
@@ -50,14 +50,11 @@ class index:
 
         #while flag and len(block[name]) != 0:
             #data = block[name][sorted(block[name].keys())[0]]
-        print '\033[1;32m'
-        print "start"
-        print '\033[0m'
-        os.system("python exp.py -i '%s'" %json.dumps(data))
-        print '\033[1;31m'
-        print "end"
-        print '\033[0m'
+
+        os.system("python exp.py -i '%s' &" %json.dumps(data))
+
         #block[name].pop(sorted(block[name].keys())[0])
+        return "Done."
 
     # not in use, moved to exp.py
     def exp(self, data):
