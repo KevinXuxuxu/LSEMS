@@ -48,9 +48,18 @@ def parse_args():
     return opts
 
 def main():
+
+    print '\033[1;32m'
+    print "start"
+    print '\033[0m'
+
     opts = parse_args()
     data = json.loads(opts.input)
     exp(data)
+
+    print '\033[1;31m'
+    print "end"
+    print '\033[0m'
 
 if __name__ == "__main__":
     main()
