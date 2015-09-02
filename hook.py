@@ -40,20 +40,8 @@ class index:
         if no_run:
             return "Done."
 
-        #lock.acquire()
-        #if ( not block.has_key(name) ) or len(block[name]) == 0:
-        #    block[name] = {asctime(): data}
-        #    flag = True
-        #else:
-        #    block[name][asctime()] = data
-        #lock.release()
-
-        #while flag and len(block[name]) != 0:
-            #data = block[name][sorted(block[name].keys())[0]]
-
         os.system("python exp.py -i '%s' &" %json.dumps(data))
 
-        #block[name].pop(sorted(block[name].keys())[0])
         return "Done."
 
     # not in use, moved to exp.py
