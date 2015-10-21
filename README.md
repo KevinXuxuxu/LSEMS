@@ -76,6 +76,47 @@ In our data model, the datas we deal with are largely statical, we conduct exper
 
 As shown in the above graph, the management of data and metadata are on the left part where a file system is in charge of holding the datas and unstructured datas are structured and imported into the database. On the right side, the process of experiment is inferred which dynamically manipulates datasets in the database. Also joint view is supported in the system.
 
+## Bioinformatics Experiment Example
+
+### the Fruitfly Project
+
+The fruitfly project is a genomic project determined to find gene interaction network over the embryos of different expression type of fruitfly. For the early stage embryo with relatively simple structure, we use simple image processing and registration to create preprocessed data, and then run Non-negative Matrix Factorization (2014, Mairal, Bach, Ponce) over the dataset to find its principle patterns. For the later stage embryos with complicated structure, we run superpixel segmentation (2003, Ren, Malik) over the image for organ detection, and then run NMF on each individual regions as we planed. Later part of the report will focus on the statistic reasoning over the experiment, the design and development of corresponding data structure and deploying scalable cluster and design of corresponding algorithm for high performance experiments.
+
+### Principle Patterns and Stability
+
+We hope to get principle patterns with actual Biological explanations. Thus, we follow theses procedures:
+
+- preprocess and register raw images into 405 pixel eclipse pattern.
+- run non-negative matrix factorization over the registered data with various $$K$$ which is the number of learned patterns.
+- run stability measurement over different $$K$$ to find the most stable one.
+
+![fruitfly_early](image/fruitfly_early.png)
+
+Specifically, for each number of patterns ($$K$$), we run NMF for $$B$$ times ($$B=100$$), and pairwisely compute the dissimilarity of of results:
+
+- $$diss(D_1, D_2) = \frac{1}{2}(\frac{1}{K}\sum_j(1-\max_iC_{ij})+\frac{1}{K}\sum_i(1-\max_jC_{ij}))$$
+
+and then calculate the the stabipity for $$K$$:
+
+- $$stab(K) = \frac{2}{B(B-1)}\sum_{i<j}diss(D_i,D_j)$$
+
+### Spark Cluster
+
+For the non-negative matrix factorization part, we uses a library called SPAMS which is an optimization toolbox for solving various sparse estimation problems. It implements the Mairal NMF algorithm with APIs in various programming languages. Although it carries along it self the optimization using OpenMP, it is still too time consuming for the original version of the experiment. We choose to use spark.
+
+- Spark has its own machine learning library for us to use. Within which the most promising algorithm is the `ALS.train()` in package `pyspark.mllib.recommendation`. It is originally used for predicting customers' likes and recommends productions accurately. We tried to use its feature extraction function. It worked results in low number of iterations which are hardly satisfactory and it crashes with high number of iterations. The reason is likely to be that this algorithm is designed for sparse inputs.
+
+- We then  parallelize the SPAMS algorithm using spark over many test cases, which is relatively easy. A stand alone spark cluster is then deployed over LBL's virtual machines. Although the vms may share same cores, so the "cluster" may have much less computation power than it seems to have, we still see a dramatic speed up which is adequate as a proof of concept.
+
+### Data Structure design
+As mentioned above, later stage embryos with complicated structures need organ detection before NMF. We choose Malik's superpixel segmentation algorithm as shown below.
+
+![sp_segment](image/sp_segment.jpg)
+
+In the system side, the superpixel segmentation slgorithm is pretty slow, so it's not possible to segment same image again every time we run the experiment. As a result, We use gravity center and boundary pixels of each superpixel to represent it in the data base and developed corresponding inport iterator to connect with the system. In this way, superpixel can be stored in a sparse way and retrieved easily.
+
+I also coded the import iterator to import metadata from LBL SQL database.
+
 ##Tutorial
 This tutorial will lead you through the pipeline with examples of the system's key functionalities.
 ### Registration
@@ -498,3 +539,24 @@ This tutorial will lead you through the pipeline with examples of the system's k
         }
 
 For languages like `Matlab` and `R` for which we don't have outAPI support yet, it will also work as long as experiment results are output in the above format manually.
+
+## Acknowledgement
+
+- Siqi Wu from stats department of UCB, main contributor of fruitfly project.
+- Erwin Frise from LBL DHCP, my host.
+- Bin Yu, professor from Stats department of UCB.
+- Wei Xu, assistant dean of IIIS, my tutor.
+- Karl Kumbier from stats department of UCB, mainly worked on later stages embryos.
+
+# Reference
+
+1. Freeman J, Vladimirov N, Kawashima T, et al. Mapping brain activity at scale with cluster computing.[J]. _Nature Methods_, 2014, 11(9):941-950.
+2. Noble W S. A Quick Guide to Organizing Computational Biology Projects[J]. _Plos Computational Biology_, 2009, 5(7):338-343.
+3. Bowers, John C., et al. Managing Reproducible Computational Experiments with Curated Proteins in KINARI-2. _Springer_, 2015
+4. J Shin, A Paepcke, J Widom. X3 Data Management System for Computational Experiments. _Stanford Infolab_, 2013
+5. Dewitt D J, Paulson E, Robinson E, et al. Clustera: an integrated computation and data management system.[J]. _Proc of Vldb Conf_, 2008, 1(1).
+6. JM Wozniak, TG Armstrong, DS Katz, et al. Toward Computational Experiment Management via Multi-language Applications. _Mcs.anl.gov_, 2014
+7. Organization. N I S. Understanding metadata[J]. _National Information Standards Organization_, 2004.
+8. Mairal J, Bach F, Ponce J, et al. Online Learning for Matrix Factorization and Sparse Coding[J]. _Journal of Machine Learning Research_, 2009, 11(1):19-60.
+9. Ren X, Malik J. Learning a classification model for segmentation[C]. _IEEE Computer Society_, 2003:10-17 vol.1.
+10. Mori G, Ren X, Efros A A, et al. Recovering human body configurations: combining segmentation and recognition[C]. _Computer Vision and Pattern Recognition_, 2004. _CVPR_ 2004. _Proceedings of the 2004 IEEE Computer Society Conference on IEEE_, 2004:II-326 - II-333 Vol.2.

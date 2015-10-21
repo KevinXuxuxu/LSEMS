@@ -175,8 +175,9 @@ def run(params):
             for out_file in re.split(' ', params['out']):
                 mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
-        os.system('cp output ~')
-        os.system('cp output.json ~')
+        r_name = "result_%s" %(acstime().replace(' ','-'))
+        os.system("mv %s %s" %("output.csv", r_name))
+        os.system("cp %s /user_data/%s/%s/" %(r_name, params['name'], params['repo_name']))
         print "recording outputs"
         save_results('output.json', params)
         os.chdir('..')
