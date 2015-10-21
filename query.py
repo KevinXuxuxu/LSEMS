@@ -163,11 +163,13 @@ class Query:
         return u.diff(expName)
 
 
+'''
 q = Query("Bob")
 q.showData()
 q.showDataDescription("sentiment_result2")
 q.showDataDescription("testData", "commit_ids")
 q.diffExp("gedatest")
+'''
 '''
 q.showData("sentiment_data")
 q.joinView("sentiment_result2", name_list=['sentiment_data'], key='id')
