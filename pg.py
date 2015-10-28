@@ -1,6 +1,7 @@
 import psycopg2
 import codecs
 import os
+import re
 
 class PGBackend:
 
