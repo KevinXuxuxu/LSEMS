@@ -1,4 +1,5 @@
 import psycopg2
+import csv
 import codecs
 import os
 import re
