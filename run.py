@@ -176,7 +176,7 @@ def run(params):
             for out_file in re.split(' ', params['out']):
                 mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
         print "copying outputs..."
-        r_name = "result_%s" %(asctime().replace(' ','-'))
+        r_name = "result_%s" %(asctime().replace(' ','-').replace(':','-'))
         os.system("mv %s %s" %("output.csv", r_name))
         os.system("cp %s /user_data/%s/%s/" %(r_name, params['name'].lower(), params['repo_name']))
         pg.file_import(repo_base=params['name'], repo=params['repo_name'], file_name=r_name)
