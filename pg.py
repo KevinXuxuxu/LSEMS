@@ -1,4 +1,5 @@
 import psycopg2
+import codecs
 import os
 
 class PGBackend:
@@ -91,8 +92,8 @@ def file_import(repo_base, repo, file_name):
     header = True
     quote_character = ''
     delimiter = delimiter.decode('string_escape')
-    repo_dir = '/user_data/%s/%s' %(repo_base, repo)
-    file_path = file_name
+    repo_dir = '/user_data/%s/%s/' %(repo_base, repo)
+    file_path = repo_dir + file_name
     table_name, _ = os.path.splitext(file_name)
     table_name = clean_str(table_name, 'table')
     dh_table_name = '%s.%s.%s' %(repo_base, repo, table_name)
@@ -116,5 +117,5 @@ def file_import(repo_base, repo, file_name):
     manager = PGBackend()
     manager.execute_sql(query=query)
     manager.import_file(table_name=table_name,
-                        file_path=repo_dir
+                        file_path=file_path
                         )
