@@ -186,6 +186,7 @@ def run(params):
         os.system('rm -rf '+dir_name)
     except Exception as e:
         print e
+        print e.args
         print "Aborting..."
         os.chdir('..')
         os.system('rm -rf '+dir_name)

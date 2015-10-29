@@ -116,6 +116,8 @@ def file_import(repo_base, repo, file_name):
         query += ', %s %s' %(columns[i], 'text')
     query += ')'
 
+    print query
+
     manager = PGBackend()
     manager.execute_sql(query=query)
     manager.import_file(table_name=table_name,
