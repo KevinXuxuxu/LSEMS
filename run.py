@@ -135,21 +135,22 @@ def save_results(file_name, params):
 
 def run(params):
     print "running"
-    old_dir = os.getcwd()
-    tmp = re.split('/', old_dir)
-    sb_dir = "/%s/%s/sandbox" %(tmp[1],tmp[2])
-    #sb_dir = "/home/ubuntu/sandbox"
-    src = params['src']
     try:
+        old_dir = os.getcwd()
+        tmp = re.split('/', old_dir)
+        if params['name'] not in os.listdir('/user_data'):
+            raise Exception("user not in Datahub.")
+        sb_dir = "/user_data/%s" %(params['name'])
+        src = params['src']
         if src not in os.listdir('src'):
             raise Exception("fail to find source file "+src)
-        if params['name'] in os.listdir(sb_dir):
-            print "deleting duplication..."
-            os.system("rm -r %s/%s/" %(sb_dir, params['name']))
+        # if 'src' in os.listdir(sb_dir):
+        #     print "deleting duplication..."
+        #     os.system("rm -r %s/src/" %(sb_dir))
         os.system("cp -r src %s" %sb_dir)
         os.chdir(sb_dir)
         # user name with time stamp as temp directory
-        dir_name = "%s-%s" %(params['name'], asctime().replace(' ','_'))
+        dir_name = "src-%s" %(params['name'], asctime().replace(' ','_'))
         os.system("mv src %s" %dir_name)
         os.chdir(dir_name)
         command = ""
@@ -180,7 +181,7 @@ def run(params):
         r_name = "result_%s" %(params['commit_id'])
         os.system("mv %s %s" %("output.csv", r_name))
         os.system("cp %s /user_data/%s/%s/" %(r_name, params['name'].lower(), params['repo_name']))
-        pg.file_import(repo_base=params['name'].lower(), repo=params['repo_name'], file_name=r_name)
+        # pg.file_import(repo_base=params['name'].lower(), repo=params['repo_name'], file_name=r_name)
         print "recording outputs"
         save_results('output.json', params)
         os.chdir('..')
