@@ -140,7 +140,7 @@ def run(params):
         tmp = re.split('/', old_dir)
         if params['name'].lower() not in os.listdir('/user_data'):
             raise Exception("user not in Datahub.")
-        sb_dir = "/user_data/%s" %(params['name'].lower())
+        sb_dir = "/user_data/%s/%s" %(params['name'].lower(), params['repo_name'].lower())
         src = params['src']
         if src not in os.listdir('src'):
             raise Exception("fail to find source file "+src)
