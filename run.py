@@ -138,9 +138,9 @@ def run(params):
     try:
         old_dir = os.getcwd()
         tmp = re.split('/', old_dir)
-        if params['name'] not in os.listdir('/user_data'):
+        if params['name'].lower() not in os.listdir('/user_data'):
             raise Exception("user not in Datahub.")
-        sb_dir = "/user_data/%s" %(params['name'])
+        sb_dir = "/user_data/%s" %(params['name'].lower())
         src = params['src']
         if src not in os.listdir('src'):
             raise Exception("fail to find source file "+src)
@@ -150,7 +150,7 @@ def run(params):
         os.system("cp -r src %s" %sb_dir)
         os.chdir(sb_dir)
         # user name with time stamp as temp directory
-        dir_name = "src-%s" %(params['name'], asctime().replace(' ','_'))
+        dir_name = "src-%s" %(asctime().replace(' ','_'))
         os.system("mv src %s" %dir_name)
         os.chdir(dir_name)
         command = ""
