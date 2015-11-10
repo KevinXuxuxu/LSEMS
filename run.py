@@ -178,7 +178,7 @@ def run(params):
                 # mgdb.generate_data(out_file, description="generated data "+out_file, parent=parent)
                 os.system("cp %s /user_data/%s/%s/" %(out_file, params['name'].lower(), params['repo_name']))
         print "copying outputs..."
-        r_name = "result_%s" %(params['commit_id'])
+        r_name = "result_%s_%s" %(asctime().replace(' ', '-'), params['commit_id'])
         os.system("mv %s %s" %("output.csv", r_name))
         os.system("cp %s /user_data/%s/%s/" %(r_name, params['name'].lower(), params['repo_name']))
         # pg.file_import(repo_base=params['name'].lower(), repo=params['repo_name'], file_name=r_name)
