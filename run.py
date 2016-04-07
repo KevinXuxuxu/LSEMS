@@ -18,7 +18,7 @@ import re
 import shutil
 import data
 import json
-import pg
+# import pg
 
 def verifyUser(client, name):
     """
@@ -180,7 +180,7 @@ def run(params):
         r_name = "result_%s" %(params['commit_id'])
         os.system("mv %s %s" %("output.csv", r_name))
         os.system("cp %s /user_data/%s/%s/" %(r_name, params['name'].lower(), params['repo_name']))
-        pg.file_import(repo_base=params['name'].lower(), repo=params['repo_name'], file_name=r_name)
+        # pg.file_import(repo_base=params['name'].lower(), repo=params['repo_name'], file_name=r_name)
         print "recording outputs"
         save_results('output.json', params)
         os.chdir('..')
