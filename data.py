@@ -105,6 +105,10 @@ class DSData(Data):
                             diffs.append({ commit_id1: diffs1, commit_id2: diffs2, 'id': i['id']})
         return DataFrame(diffs)
 
+    def is_present(self):
+        info = self.db.find_one({'_id': 'info'})
+        return ((not info.has_key('present')) or info['present'])
+
 class ExpData(Data):
 
     def show_exp_names(self):
@@ -167,7 +171,8 @@ class Database:
     """
     def __init__(self, db="datas", address=""):
         if address == "":
-            config = json.load(open(os.environ.get("HOME") + "/sandbox/config.json"))
+            # config = json.load(open(os.environ.get("HOME") + "/sandbox/config.json"))
+            config = json.load(open("config.json"))
             address = config['mongodb_url']
         client = MongoClient(address)
         self.DB = client[db]
