@@ -61,7 +61,8 @@ def record(params, git_info = {}):
 
     try:
         # connect to MongoDB
-        config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+        # config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+        config = json.load(open("config.json"))
         try:
             client = MongoClient(config["mongodb_url"])
         except Exception as e:
