@@ -177,7 +177,7 @@ def run(params):
         parent = re.split('\.', params['data_set'])[0]
         if params.has_key('out'):
             for out_file in re.split(' ', params['out']):
-                os.system("cp %s "+sb_dir+"/data" %(out_file))
+                os.system("cp %s %s/data" %(out_file, sb_dir))
         print "copying outputs..."
         # r_name = "result_%s" %(params['commit_id'])
         # os.system("mv %s %s" %("output.csv", r_name))
