@@ -177,8 +177,9 @@ def run(params):
         parent = re.split('\.', params['data_set'])[0]
         if params.has_key('out'):
             for out_file in re.split(' ', params['out']):
-                os.system("cp %s %s/data" %(out_file, sb_dir))
-                mgdb.import_data(out_file, parent=params['data_set'].split('.')[0], exp=params['repo_name'], commit_id=params['commit_id'])
+                if params['cache']:
+                    os.system("cp %s %s/data" %(out_file, sb_dir))
+                mgdb.import_data(out_file, parent=params['data_set'].split('.')[0], exp=params['repo_name'], commit_id=params['commit_id'], present=params['cache'])
         print "copying outputs..."
         # r_name = "result_%s" %(params['commit_id'])
         # os.system("mv %s %s" %("output.csv", r_name))

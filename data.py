@@ -178,7 +178,7 @@ class Database:
         self.DB = client[db]
         self.name = db
 
-    def import_data(self, name, description="", parent="", exp="", commit_id="", ignore=[], it=None, _type='', **kwargs):
+    def import_data(self, name, description="", parent="", exp="", commit_id="", ignore=[], it=None, _type='', present=True, **kwargs):
         if self.DB.name != 'datas':
             print "should not import data into db other than 'datas'!"
             return
@@ -192,12 +192,12 @@ class Database:
                 coll.insert({'_id': 'info',
                             'name': name,
                             'type': _type,
-                            'path': '~/sandbox/data/'+name,
+                            'path': '~/sandbox/data/'+name if present else "",
                             'description': description,
                             'parent': parent,
                             'exp': exp,
                             'commit_id': commit_id,
-                            'present': True,
+                            'present': present,
                             'commit_ids': []})
                 for i in it(**kwargs):
                     if 'id' not in i.keys():
@@ -215,12 +215,12 @@ class Database:
                 coll.insert({'_id': 'info',
                             'name':t[0],
                             'type':t[-1],
-                            'path':'~/sandbox/data/'+name,
+                            'path':'~/sandbox/data/'+name if present else "",
                             'description': description,
                             'parent': parent,
                             'exp': exp,
                             'commit_id': commit_id,
-                            'present': True,
+                            'present': present,
                             'commit_ids': []})
                 fp = open(name)
                 if t[-1]=='csv': r = csv.reader(fp)
@@ -247,9 +247,12 @@ class Database:
                 coll.insert({'_id': 'info',
                             'name':t[0],
                             'type':t[-1],
-                            'path':'~/sandbox/data/'+name,
+                            'path':'~/sandbox/data/'+name if present else "",
                             'description': description,
                             'parent': parent,
+                            'exp': exp,
+                            'commit_id': commit_id,
+                            'present': present,
                             'commit_ids': []})
                 l = json.load(open(name))
                 for d in l:
