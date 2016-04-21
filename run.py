@@ -178,7 +178,7 @@ def run(params):
         if params.has_key('out'):
             for out_file in re.split(' ', params['out']):
                 os.system("cp %s %s/data" %(out_file, sb_dir))
-                mgdb.import_data(out_file, parent=params['data_set'], exp=params['repo_name'], commit_id=params['commit_id'])
+                mgdb.import_data(out_file, parent=params['data_set'].split('.')[0], exp=params['repo_name'], commit_id=params['commit_id'])
         print "copying outputs..."
         # r_name = "result_%s" %(params['commit_id'])
         # os.system("mv %s %s" %("output.csv", r_name))
