@@ -23,6 +23,7 @@ class Data:
         self.Database = Database
         self.db = Database.DB[name]
         self.name = name
+        self.info = self.db.find_one({'_id': 'info'})
 
     def record(self, _id, _dict):
         """
@@ -56,10 +57,6 @@ class Data:
         return rtn
 
 class DSData(Data):
-
-    def __init__(self, Database, name):
-        super(DSData, self).__init__(Database, name)
-        self.info = self.db.find_one({'_id': 'info'})
 
     def find_parent(self):
         if self.info.has_key('parent') and self.info['parent'] != "":
