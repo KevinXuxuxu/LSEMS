@@ -57,20 +57,22 @@ class Data:
 
 class DSData(Data):
 
+    def __init__(self, Database, name):
+        super(Data, self).__init__(Database, name)
+        self.info = self.db.find_one({'_id': 'info'})
+
     def find_parent(self):
-        info = self.db.find_one({'_id': 'info'})
-        if info.has_key('parent') and info['parent'] != "":
-            return info['parent']
+        if self.info.has_key('parent') and self.info['parent'] != "":
+            return self.info['parent']
         return None
 
     def find_root(self):
-        info = self.db.find_one({'_id': 'info'})
-        if info.has_key('parent') and info['parent'] != "":
-            return self.Database.get_data(info['parent']).find_root()
+        if self.info.has_key('parent') and self.info['parent'] != "":
+            return self.Database.get_data(self.info['parent']).find_root()
         return self.name
 
     def show_info(self):
-        return DataFrame([self.db.find_one({'_id':'info'})])
+        return DataFrame(self.info)
 
     def show_data(self):
         rtn = []
@@ -106,8 +108,15 @@ class DSData(Data):
         return DataFrame(diffs)
 
     def is_present(self):
-        info = self.db.find_one({'_id': 'info'})
-        return ((not info.has_key('present')) or info['present'])
+        return ((not self.info.has_key('present')) or self.info['present'])
+
+    def regenerate(self):
+        if self.is_present():
+            print "the data set is present!"
+            return
+        datapath = "~/sandbox/data"
+        repospath = "~/LSEMS/repos"
+        
 
 class ExpData(Data):
 
