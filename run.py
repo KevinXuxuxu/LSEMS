@@ -178,6 +178,7 @@ def run(params):
         if params.has_key('out'):
             for out_file in re.split(' ', params['out']):
                 os.system("cp %s %s/data" %(out_file, sb_dir))
+                data.import_data(out_file.split('.')[0], parent=params['data_set'], exp=params['repo_name'], commit_id=params['commit_id'], _type=out_file.split('.')[1])
         print "copying outputs..."
         # r_name = "result_%s" %(params['commit_id'])
         # os.system("mv %s %s" %("output.csv", r_name))
