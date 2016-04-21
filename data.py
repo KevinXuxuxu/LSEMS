@@ -186,9 +186,9 @@ class Database:
 
         if it: # self defined input iterator
             try:
-                coll = self.DB.create_collection(name)
                 if parent != "" and parent not in self.DB.collection_names():
                     raise Exception("parent data set not in DB!")
+                coll = self.DB.create_collection(name)
                 coll.insert({'_id': 'info',
                             'name': name,
                             'type': _type,
@@ -209,9 +209,9 @@ class Database:
         elif len(t) == 2 and t[-1] in ['csv','tsv']:
             # it's csv or tsv file
             try:
-                coll = self.DB.create_collection(t[0])
                 if parent != "" and parent not in self.DB.collection_names():
                     raise Exception("parent data set not in DB!")
+                coll = self.DB.create_collection(t[0])
                 coll.insert({'_id': 'info',
                             'name':t[0],
                             'type':t[-1],
