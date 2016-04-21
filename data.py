@@ -69,7 +69,7 @@ class DSData(Data):
         return self.name
 
     def show_info(self):
-        return DataFrame(self.info)
+        return DataFrame([self.info])
 
     def show_data(self):
         rtn = []
