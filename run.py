@@ -162,7 +162,8 @@ def run(params):
             command += ' > output'
         elif params['type'] == 'pyspark':
             # set env-variable for spark-cluster
-            config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+            # config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+            config = json.load(open(os.environ.get('HOME') + "/LSEMS/config.json"))
             spark_master_config = "MASTER=" + config['spark_master']
             command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
             json.dump({'param': params['param']}, open('exp.json', 'w'))
