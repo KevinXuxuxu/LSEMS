@@ -58,7 +58,7 @@ class Data:
 class DSData(Data):
 
     def __init__(self, Database, name):
-        super(Data, self).__init__(Database, name)
+        super(DSData, self).__init__(Database, name)
         self.info = self.db.find_one({'_id': 'info'})
 
     def find_parent(self):
@@ -116,7 +116,7 @@ class DSData(Data):
             return
         datapath = "~/sandbox/data"
         repospath = "~/LSEMS/repos"
-        
+
 
 class ExpData(Data):
 
