@@ -32,7 +32,8 @@ def exp(data):
         run.read('exp.json',
                 {"commit_id": data['commits'][0]['id'],
                 'repo_name': data['repository']['name'],
-                'name': data['user_name'] },)
+                'name': data['user_name'],
+                'repo_url': repo_url },)
     except Exception as e:
         print e.message
         os.chdir('../..')

@@ -78,6 +78,7 @@ def record(params, git_info = {}):
         params['name'] = git_info['name']
         repo_name = git_info['repo_name']
         params['repo_name'] = repo_name
+        params['repo_url'] = git_info['repo_url']
         user = verifyUser(client, git_info['name'])
 
         exp = user.find_one({'exp_name': repo_name})
@@ -179,7 +180,7 @@ def run(params):
             for out_file in re.split(' ', params['out']):
                 if params['cache']:
                     os.system("cp %s %s/data" %(out_file, sb_dir))
-                mgdb.import_data(out_file, parent=params['data_set'].split('.')[0], exp=params['repo_name'], commit_id=params['commit_id'], present=params['cache'])
+                mgdb.import_data(out_file, parent=params['data_set'].split('.')[0], exp=params['repo_url'], commit_id=params['commit_id'], present=params['cache'])
         print "copying outputs..."
         # r_name = "result_%s" %(params['commit_id'])
         # os.system("mv %s %s" %("output.csv", r_name))

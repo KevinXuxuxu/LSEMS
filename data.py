@@ -113,6 +113,14 @@ class DSData(Data):
             return
         datapath = "~/sandbox/data"
         repospath = "~/LSEMS/repos"
+        repo_url = self.info['exp']
+        repo_name = repo_url.split('/')[-1].split('.')[0]
+        commit_id = self.info['commit_id']
+        if repo_name in os.listdir(repospath):
+            print("found repo existing.")
+            os.system("rm -r -f %s/%s" %(repospath, repo_name))
+            print("deleted.")
+        os.system("git clone "+repo_url)
 
 
 class ExpData(Data):
