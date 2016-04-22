@@ -111,9 +111,10 @@ class DSData(Data):
         if self.is_present():
             print "the data set is present!"
             return
-        datapath = "~/sandbox/data"
-        repospath = "~/LSEMS/repos"
-        sbpath = "~/sandbox"
+        HOME = os.environ.get("HOME")
+        datapath = HOME + "/sandbox/data"
+        repospath = HOME + "/LSEMS/repos"
+        sbpath = HOME + "/sandbox"
         repo_url = self.info['exp']
         _,_,_,_,_,user,repo_name,_ = re.split(re.compile("[@\.\:\/]+"), repo_url)
         commit_id = self.info['commit_id']
