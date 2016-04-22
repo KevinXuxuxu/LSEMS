@@ -134,6 +134,7 @@ class DSData(Data):
         os.system("cp -r src %s/%s" %(sbpath, dir_name))
         os.chdir("%s/%s" %(sbpath, dir_name))
         command = ""
+        src = params['src']
         if params['type'] == 'python':
             command += 'python '+src
             for p in params['param']:
