@@ -113,14 +113,46 @@ class DSData(Data):
             return
         datapath = "~/sandbox/data"
         repospath = "~/LSEMS/repos"
+        sbpath = "~/sandbox"
         repo_url = self.info['exp']
-        repo_name = repo_url.split('/')[-1].split('.')[0]
+        _,_,_,_,_,user,repo_name,_ = re.split(re.compile("[@\.\:\/]+"), repo_url)
         commit_id = self.info['commit_id']
         if repo_name in os.listdir(repospath):
             print("found repo existing.")
             os.system("rm -r -f %s/%s" %(repospath, repo_name))
             print("deleted.")
-        os.system("git clone "+repo_url)
+        os.chdir(repospath)
+        os.system("git clone " + repo_url)
+        os.chdir("%s/%s" %(repospath, repo_name))
+        os.system("git fetch origin" + commit_id)
+        os.system("git reset --hard FETCH_HEAD")
+        os.system("cp -r src " + sbpath)
+        params = json.load(open("exp.json"))
+        dir_name = "%s-%s" %(user, asctime().replace(' ','_'))
+        os.system("cp -r src %s/%s" %(sbpath, dir_name))
+        os.chdir(dir_name)
+        command = ""
+        if params['type'] == 'python':
+            command += 'python '+src
+            for p in params['param']:
+                command += " --"+p+"="+str(params['param'][p])
+            command += ' > output'
+        elif params['type'] == 'pyspark':
+            # set env-variable for spark-cluster
+            # config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
+            config = json.load(open(os.environ.get('HOME') + "/LSEMS/config.json"))
+            spark_master_config = "MASTER=" + config['spark_master']
+            command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
+            json.dump({'param': params['param']}, open('exp.json', 'w'))
+            command += ' > output'
+        print command
+        # running command
+        os.system(command)
+
+        os.system("cp %s.%s %s" %(self.info['name'], self.info['_type'], datapath))
+        d = self.info
+        d['present'] = True
+        self.db.replace_one({'_id': 'info'}, d)
 
 
 class ExpData(Data):
