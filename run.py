@@ -143,7 +143,18 @@ def run(params):
     sb_dir = "/%s/%s/sandbox" %(tmp[1],tmp[2])
     #sb_dir = "/home/ubuntu/sandbox"
     src = params['src']
+
+
     try:
+        mgdb = data.Database()
+        parent = re.split('\.', params['data_set'])[0]
+        if parent not in mgdb.DB.collection_names():
+            raise Exception("parent data set not registered: " + parent)
+        parentdb = mgdb.get_data(parent)
+        if not parentdb.is_present():
+            print "parent not present, regenerating..."
+            parentdb.regenerate()
+
         if src not in os.listdir('src'):
             raise Exception("fail to find source file "+src)
         if params['name'] in os.listdir(sb_dir):
@@ -174,8 +185,6 @@ def run(params):
         # running command
         os.system(command)
 
-        mgdb = data.Database()
-        parent = re.split('\.', params['data_set'])[0]
         if params.has_key('out'):
             for out_file in re.split(' ', params['out']):
                 if params['cache']:
