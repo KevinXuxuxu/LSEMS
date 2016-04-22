@@ -152,7 +152,7 @@ class DSData(Data):
         # running command
         os.system(command)
 
-        os.system("cp %s.%s %s" %(self.info['name'], self.info['_type'], datapath))
+        os.system("cp %s.%s %s" %(self.info['name'], self.info['type'], datapath))
         d = self.info
         d['present'] = True
         self.db.replace_one({'_id': 'info'}, d)
