@@ -132,7 +132,7 @@ class DSData(Data):
         params = json.load(open("exp.json"))
         dir_name = "%s-%s" %(user, asctime().replace(' ','_'))
         os.system("cp -r src %s/%s" %(sbpath, dir_name))
-        os.chdir(dir_name)
+        os.chdir("%s/%s" %(sbpath, dir_name))
         command = ""
         if params['type'] == 'python':
             command += 'python '+src
