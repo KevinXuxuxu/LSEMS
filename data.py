@@ -109,53 +109,68 @@ class DSData(Data):
         return ((not self.info.has_key('present')) or self.info['present'])
 
     def regenerate(self):
-        if self.is_present():
-            print "the data set is present!"
-            return
-        HOME = os.environ.get("HOME")
-        datapath = HOME + "/sandbox/data"
-        repospath = HOME + "/LSEMS/repos"
-        sbpath = HOME + "/sandbox"
-        repo_url = self.info['exp']
-        _,_,_,_,_,user,repo_name,_ = re.split(re.compile("[@\.\:\/]+"), repo_url)
-        commit_id = self.info['commit_id']
-        if repo_name in os.listdir(repospath):
-            print("found repo existing.")
-            os.system("rm -r -f %s/%s" %(repospath, repo_name))
-            print("deleted.")
-        os.chdir(repospath)
-        os.system("git clone " + repo_url)
-        os.chdir("%s/%s" %(repospath, repo_name))
-        os.system("git fetch origin " + commit_id)
-        os.system("git reset --hard FETCH_HEAD")
-        os.system("cp -r src " + sbpath)
-        params = json.load(open("exp.json"))
-        dir_name = "%s-%s" %(user, asctime().replace(' ','_'))
-        os.system("cp -r src %s/%s" %(sbpath, dir_name))
-        os.chdir("%s/%s" %(sbpath, dir_name))
-        command = ""
-        src = params['src']
-        if params['type'] == 'python':
-            command += 'python '+src
-            for p in params['param']:
-                command += " --"+p+"="+str(params['param'][p])
-            command += ' > output'
-        elif params['type'] == 'pyspark':
-            # set env-variable for spark-cluster
-            # config = json.load(open(os.environ.get('HOME') + "/sandbox/config.json"))
-            config = json.load(open(os.environ.get('HOME') + "/LSEMS/config.json"))
-            spark_master_config = "MASTER=" + config['spark_master']
-            command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
-            json.dump({'param': params['param']}, open('exp.json', 'w'))
-            command += ' > output'
-        print command
-        # running command
-        os.system(command)
+        original_dir = os.getcwd()
+        try:
+            if self.is_present():
+                raise Exception("the data set is present!")
+            parent_name = self.info['parent'] if self.info.has_key('parent') else None
+            if not parent_name or parent_name == '':
+                raise Exception("no parent or not registered!")
+            else:
+                parent = self.Database.get_data(parent_name)
+                if not parent.is_present:
+                    parent.regenerate()
 
-        os.system("cp %s.%s %s" %(self.info['name'], self.info['type'], datapath))
-        d = self.info
-        d['present'] = True
-        self.db.replace_one({'_id': 'info'}, d)
+            HOME = os.environ.get("HOME")
+            datapath = HOME + "/sandbox/data"
+            repospath = HOME + "/LSEMS/repos"
+            sbpath = HOME + "/sandbox"
+            repo_url = self.info['exp']
+            _,_,_,_,_,user,repo_name,_ = re.split(re.compile("[@\.\:\/]+"), repo_url)
+            commit_id = self.info['commit_id']
+            if repo_name in os.listdir(repospath):
+                print("found repo existing.")
+                os.system("rm -r -f %s/%s" %(repospath, repo_name))
+                print("deleted.")
+            os.chdir(repospath)
+            os.system("git clone " + repo_url)
+            os.chdir("%s/%s" %(repospath, repo_name))
+            os.system("git fetch origin " + commit_id)
+            os.system("git reset --hard FETCH_HEAD")
+            os.system("cp -r src " + sbpath)
+            params = json.load(open("exp.json"))
+            if params['data_set'].split('.')[0] != parent_name:
+                raise Exception("using mismatch data set from recorded parent!")
+            dir_name = "%s-%s" %(user, asctime().replace(' ','_'))
+            os.system("cp -r src %s/%s" %(sbpath, dir_name))
+            os.chdir("%s/%s" %(sbpath, dir_name))
+            command = ""
+            src = params['src']
+            if params['type'] == 'python':
+                command += 'python '+src
+                for p in params['param']:
+                    command += " --"+p+"="+str(params['param'][p])
+                command += ' > output'
+            elif params['type'] == 'pyspark':
+                config = json.load(open(os.environ.get('HOME') + "/LSEMS/config.json"))
+                spark_master_config = "MASTER=" + config['spark_master']
+                command += spark_master_config + ' pyspark --conf spark.akka.frameSize=100 ' + src
+                json.dump({'param': params['param']}, open('exp.json', 'w'))
+                command += ' > output'
+            print command
+            os.system(command)
+
+            os.system("cp %s.%s %s" %(self.info['name'], self.info['type'], datapath))
+            d = self.info
+            d['present'] = True
+            self.db.replace_one({'_id': 'info'}, d)
+        except Exception as e:
+            print e
+            print 'Aborting...'
+            pass
+        os.chdir(sbpath)
+        os.system("rm -rf %s" %(dir_name))
+        os.chdir(original_dir)
 
 
 class ExpData(Data):
