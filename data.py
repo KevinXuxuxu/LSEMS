@@ -11,6 +11,7 @@ __email__ = "kevin.xu.fangzhou@gmail.com"
 from json import *
 from pymongo import *
 from pandas import *
+from time import asctime
 import csv
 import os
 import re
@@ -125,7 +126,7 @@ class DSData(Data):
         os.chdir(repospath)
         os.system("git clone " + repo_url)
         os.chdir("%s/%s" %(repospath, repo_name))
-        os.system("git fetch origin" + commit_id)
+        os.system("git fetch origin " + commit_id)
         os.system("git reset --hard FETCH_HEAD")
         os.system("cp -r src " + sbpath)
         params = json.load(open("exp.json"))
