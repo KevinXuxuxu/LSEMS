@@ -2,7 +2,7 @@
 > This is the manual for LSEMS (Data Hub system)
 > > LSEMS stands for Large Scale Experiment Management System
 
-##Navigate
+## Navigate
 - [Introduction](https://github.com/KevinXuxuxu/LSEMS#introduction)
 - [Structure](https://github.com/KevinXuxuxu/LSEMS#structure)
 - [Pipeline](https://github.com/KevinXuxuxu/LSEMS#pipeline)
@@ -10,23 +10,23 @@
 - [Tutorial](https://github.com/KevinXuxuxu/LSEMS#tutorial)
 - [Code Documentation](https://github.com/KevinXuxuxu/LSEMS#code-documentation)
 
-##Introduction
+## Introduction
 
-###Background
+### Background
 This project is initially determined to run a Bioinformatics experiment in large scale systems for efficiency. It involves multiple stages of image processing followed by a machine learning process. As a result, some image processing application is integrated into system, e.g. _Fiji_ and _EBImage_ (in R). Then the attention turns to
 - the management of experiment datas, including the data structure and inner logic for the experiment context.
 - the flexibility and expandability of the system so that more programming languages are supported.
 
-###Related Works
+### Related Works
 There are researches around computational biology systems that making progress this year. <a href="http://thunder-project.org", style="margin:0 auto"> <img src="http://thunder-project.org/thunder/docs/_static/thunder_logo.png"> </a> is a library for analysing large-scale neural data build on Spark distributed computing system by [_Freeman Lab_](www.janelia.org/lab/freeman-lab). Though specialised in biological data analysis, Thunder is mainly a distributed computing library for neural science. Some theoretical strategies are also proposed for presenting biological computational experiments ([_A Quick Guide to Organizing Computational Biology Projects_, 2009, W.S.Noble](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424)). Related projects are also found with specialised purpose in molecular biology ([_Managing Reproducible Computational
 Experiments with Curated Proteins in KINARI-2_, 2015, Bowers, John C., et al.](http://download.springer.com/static/pdf/139/chp%253A10.1007%252F978-3-319-19048-8_7.pdf?originUrl=http%3A%2F%2Flink.springer.com%2Fchapter%2F10.1007%2F978-3-319-19048-8_7&token2=exp=1436949747~acl=%2Fstatic%2Fpdf%2F139%2Fchp%25253A10.1007%25252F978-3-319-19048-8_7.pdf%3ForiginUrl%3Dhttp%253A%252F%252Flink.springer.com%252Fchapter%252F10.1007%252F978-3-319-19048-8_7*~hmac=a974653d2b95fe6638bf97bf2ea1ee9ca3db4cdee125ae5363db641ce2e204d7))
 
 Researches and developments on general purposed computational experiment management system (EMS) included the X3  Data Management System for Computational Experiments ([_X3_, J.Shin, A.Paepcke, J.Widom](http://ilpubs.stanford.edu:8090/1080/1/3x-demo.pdf)) which applied a unified data structure of encapsulating each individual experiment with its data; and Clustera Integrated Computation And Data Management System ([_Clustera_, 2008, DeWitt, David J., et al.](http://www.eecs.berkeley.edu/~krioukov/clustera.pdf)), which used SQL for data managing and dedicated in extensibility. Further more, experiment management with multi-language applications are also researched by scientists ([_Toward Computational Experiment Management via Multi-language Applications_, Wozniak, Justin M., et al.](http://swift-lang.org/papers/pdfs/Multilanguage_2014.pdf)).
 
-###Purpose
+### Purpose
 In this project, we introduce an integrated solution to the management and analysis of data mining and machine learning experiments in Bioinformatics and other fields. The purpose of the system is to manage experiment (information of the experiment), metadata (experiment results, etc.) and data sets in a more organised and logical way, with the help of multiple open source projects: a version control system to handle experiment/code logic (e.g. Gitlab) and a NoSQL database with designed data structure to handle metadata and data sets (e.g. MongoDB). Such logics include but not limited to experiment code versioning, data set lineage and joint view. Further more, the system has a strong expandability for experiments with different environment demands. Various languages are supported and large scale distributed computing system (e.g. Hadoop & Spark) are also available for faster processing speed on big datas.
 
-##Structure
+## Structure
 The system is developed on two open source project:
 
 - [Gitlab](http://about.gitlab.com)
@@ -47,7 +47,7 @@ The system contains 4 parts, as shown in the graph.
 - The _System Core_ communicates with ___MongoDB Server___ for management of data set and experiment data (metadata).
 - The _System Core_ may access to a ___Large Scale Cluster___ for more computational power.
 
-##Pipeline
+## Pipeline
 The code manage and auto-run system runs in a pipeline as shown below
 
 - User pushes code to GitLab Server, the server POST to system core through web hook.
@@ -58,7 +58,7 @@ The code manage and auto-run system runs in a pipeline as shown below
 - Import output dataset (if any) into `datas` db in MongoDB server.
 - Finishes.
 
-##Data Model
+## Data Model
 
 The system is based on separation of "data" and "metadata". According to [Wikipedia](https://en.wikipedia.org/wiki/Metadata), metadata is defined as follows:
 
@@ -117,7 +117,7 @@ In the system side, the superpixel segmentation slgorithm is pretty slow, so it'
 
 I also coded the import iterator to import metadata from LBL SQL database.
 
-##Tutorial
+## Tutorial
 This tutorial will lead you through the pipeline with examples of the system's key functionalities.
 ### Registration
 - After connecting to VPN, type <http://10.2.2.31> to open the main page of GitLab for registration.
